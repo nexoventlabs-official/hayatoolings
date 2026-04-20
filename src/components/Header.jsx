@@ -13,7 +13,7 @@ const Header = () => {
       <div className="container header-content">
         <Link to="/" className="brand">
           <Wrench className="brand-icon text-accent" size={28} />
-          <span className="brand-text">HAYA TOOLINGS</span>
+          <span className="brand-text"><span className="brand-highlight">HAYA</span> TOOLINGS</span>
         </Link>
         
         <nav className={`nav-links ${isMenuOpen ? 'open' : ''}`}>

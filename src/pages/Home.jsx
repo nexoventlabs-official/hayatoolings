@@ -32,7 +32,7 @@ const Home = () => {
             </Link>
           </div>
 
-          <div className="grid grid-cols-2 gap-6">
+          <div className="grid grid-cols-4 gap-6">
             {featuredProducts.map((product, index) => (
               <div key={product.id} className={`animate-fade-in delay-${(index % 4) * 100}`}>
                 <ProductCard product={product} hideAddButton />
