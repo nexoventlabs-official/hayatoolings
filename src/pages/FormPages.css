@@ -1,0 +1,342 @@
+.form-page {
+  min-height: calc(100vh - var(--header-height));
+  display: flex;
+  align-items: center;
+}
+
+.max-w-2xl {
+  max-width: 42rem;
+}
+.mx-auto {
+  margin-left: auto;
+  margin-right: auto;
+}
+.w-full {
+  width: 100%;
+}
+
+.form-container {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 3rem;
+  border-radius: 1.5rem;
+}
+
+/* Contact Specific */
+.p-8 { padding: 2rem; }
+.rounded-xl { border-radius: 1rem; }
+.font-semibold { font-weight: 600; }
+
+.info-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 1rem;
+  margin-bottom: 2rem;
+}
+
+.icon-box {
+  background: rgba(255, 87, 34, 0.1);
+  padding: 1rem;
+  border-radius: 0.75rem;
+}
+
+.simulated-map {
+  width: 100%;
+  height: 100%;
+  min-height: 400px;
+  background: var(--bg-tertiary);
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  border-radius: inherit;
+}
+
+/* Abstract Topographic map feel */
+.simulated-map::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image: radial-gradient(circle at 50% 50%, transparent 20%, var(--bg-tertiary) 80%),
+    repeating-radial-gradient(circle at 50% 50%, rgba(255,255,255,0.05) 0, rgba(255,255,255,0.05) 1px, transparent 1px, transparent 20px);
+}
+
+.map-pin {
+  position: relative;
+  z-index: 2;
+  animation: bounce 2s infinite;
+}
+
+.pulse-ring {
+  position: absolute;
+  width: 20px;
+  height: 20px;
+  background: var(--accent-primary);
+  border-radius: 50%;
+  opacity: 0.5;
+  animation: pulse 2s infinite;
+}
+
+.map-text {
+  position: relative;
+  z-index: 2;
+  margin-top: 1rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  background: var(--bg-tertiary);
+  padding: 0.25rem 1rem;
+  border-radius: 1rem;
+  border: 1px solid var(--border-color);
+}
+
+@keyframes bounce {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
+}
+
+@keyframes pulse {
+  0% { transform: scale(1); opacity: 0.8; }
+  100% { transform: scale(6); opacity: 0; }
+}
+
+@media (max-width: 768px) {
+  .contact-grid {
+    grid-template-columns: 1fr;
+  }
+  .form-container {
+    padding: 2rem;
+  }
+}
+
+/* Form Page Wrapper */
+.form-page-wrapper {
+  display: flex;
+  flex-direction: column;
+}
+
+/* Business Hours Section */
+.business-hours-section {
+  position: relative;
+  padding: 5rem 0;
+  overflow: hidden;
+}
+
+.business-hours-bg {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+}
+
+.business-hours-mask {
+  width: 90%;
+  max-width: 1100px;
+  height: auto;
+  object-fit: contain;
+  filter: brightness(0) saturate(100%) invert(28%) sepia(96%) saturate(1800%) hue-rotate(2deg) brightness(96%) contrast(95%);
+  opacity: 1;
+}
+
+.business-hours-overlay {
+  position: absolute;
+  inset: 0;
+}
+
+.business-hours-content {
+  position: relative;
+  z-index: 2;
+  display: grid;
+  grid-template-columns: 1fr 1.2fr;
+  gap: 3rem;
+  align-items: center;
+  padding: 2rem 0;
+}
+
+/* Hours Image Side */
+.hours-image-side {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.hours-image-card {
+  background: #1a1a1a;
+  border-radius: 16px;
+  padding: 3rem 4rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+  box-shadow: 8px 8px 0 rgba(0, 0, 0, 0.3);
+}
+
+.hours-icon-wrapper {
+  color: var(--accent-primary);
+}
+
+.hours-image-card p {
+  color: #ccc;
+  font-size: 0.95rem;
+  font-weight: 500;
+  margin: 0;
+}
+
+/* Hours Info Side */
+.hours-info-side {
+  display: flex;
+  flex-direction: column;
+}
+
+.hours-label {
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: #fff;
+  margin-bottom: 0.5rem;
+}
+
+.hours-title {
+  font-size: 2rem;
+  font-weight: 800;
+  color: #fff;
+  margin-bottom: 1rem;
+}
+
+/* Decorative Divider */
+.hours-divider {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  margin-bottom: 1.5rem;
+}
+
+.hours-divider .diamond {
+  width: 10px;
+  height: 10px;
+  background: var(--accent-primary);
+  transform: rotate(45deg);
+}
+
+.hours-divider .line {
+  width: 40px;
+  height: 2px;
+  background: rgba(255, 255, 255, 0.4);
+}
+
+.hours-divider .circle {
+  width: 8px;
+  height: 8px;
+  border: 2px solid rgba(255, 255, 255, 0.5);
+  border-radius: 50%;
+}
+
+/* Hours Grid */
+.hours-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0;
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  border-radius: 10px;
+  overflow: hidden;
+  margin-bottom: 1.5rem;
+  max-width: 380px;
+}
+
+.hours-card {
+  padding: 1.25rem 1.5rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.3rem;
+}
+
+.hours-card:first-child {
+  border-right: 1px solid rgba(255, 255, 255, 0.25);
+}
+
+.hours-day {
+  font-size: 0.85rem;
+  color: rgba(255, 255, 255, 0.8);
+  font-weight: 500;
+  margin-bottom: 0.25rem;
+}
+
+.hours-time {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--accent-primary);
+}
+
+/* CTA Button */
+.hours-cta-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem 2rem;
+  background: #fff;
+  color: #1a1a1a;
+  font-weight: 700;
+  font-size: 0.9rem;
+  border-radius: 6px;
+  text-decoration: none;
+  width: fit-content;
+  transition: all 0.3s ease;
+  border: 2px solid #fff;
+}
+
+.hours-cta-btn:hover {
+  background: transparent;
+  color: #fff;
+}
+
+/* Business Hours Responsive */
+@media (max-width: 768px) {
+  .business-hours-content {
+    grid-template-columns: 1fr;
+    text-align: center;
+  }
+
+  .hours-info-side {
+    align-items: center;
+  }
+
+  .hours-title {
+    font-size: 1.5rem;
+  }
+
+  .hours-grid {
+    max-width: 100%;
+  }
+
+  .hours-image-card {
+    padding: 2rem 3rem;
+  }
+
+  .hours-cta-btn {
+    margin: 0 auto;
+  }
+
+  .hours-divider {
+    justify-content: center;
+  }
+}
+
+@media (max-width: 480px) {
+  .business-hours-section {
+    padding: 3rem 0;
+  }
+
+  .hours-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .hours-card:first-child {
+    border-right: none;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.25);
+  }
+}

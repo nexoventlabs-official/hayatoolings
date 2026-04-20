@@ -1,0 +1,84 @@
+.promo-banner-section {
+  padding: 4rem 0;
+}
+
+.additional-block {
+  overflow: hidden;
+  position: relative;
+  max-width: 650px;
+  margin: 0 auto;
+}
+
+.image-content-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.image-content-wrapper .image {
+  width: 100%;
+}
+
+.image-content-wrapper .image img.promo-bg-img {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+.image-content {
+  position: absolute;
+  top: 0;
+  left: 0;
+  text-align: left;
+  z-index: 2;
+  padding: 4rem 3rem;
+  max-width: 100%;
+}
+
+.image-content img.promo-logo {
+  margin-bottom: 1.5rem;
+  max-width: 150px;
+}
+
+.image-content h2 {
+  font-size: 2.5rem;
+  line-height: 1.2;
+  margin-bottom: 2rem;
+  color: #1a1a1a; /* Enforce dark text since the overlay is light */
+  font-weight: 500;
+}
+
+.image-content h2 b {
+  font-weight: 800;
+  display: block;
+  margin-top: 0.5rem;
+  font-size: 3rem;
+}
+
+.dt-sc-btn-container .dt-sc-btn {
+  background: #ff0000;
+  color: #fff;
+  border-radius: 0;
+  font-weight: 700;
+  padding: 10px 24px;
+  text-transform: uppercase;
+}
+
+.dt-sc-btn-container .dt-sc-btn:hover {
+  background: #cc0000;
+}
+
+@media (max-width: 767px) {
+  .image-content {
+    padding: 2rem;
+  }
+  
+  .image-content h2 {
+    font-size: 1.8rem;
+  }
+  
+  .image-content h2 b {
+    font-size: 2.2rem;
+  }
+}
