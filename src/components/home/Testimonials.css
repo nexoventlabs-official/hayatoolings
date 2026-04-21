@@ -6,7 +6,7 @@
 
 .testimonials-header {
   text-align: center;
-  margin-bottom: 3rem;
+  margin-bottom: 3.5rem;
 }
 
 .testimonials-header h2 {
@@ -44,173 +44,160 @@
   border-radius: 50%;
 }
 
-/* Grid */
+/* Fade Wrapper */
+.fade-wrapper {
+  transition: opacity 0.4s ease-in-out, transform 0.4s ease-in-out;
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.fade-wrapper.fading {
+  opacity: 0;
+  transform: translateY(10px);
+}
+
+/* Grid for cards */
 .testimonials-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 3rem;
+  gap: 2rem;
+  max-width: 1000px;
+  margin: 0 auto;
 }
 
-/* Card */
-.testimonial-card {
+/* Google Review Card Styling */
+.google-review-card {
+  background: #ffffff;
+  border-radius: 12px;
+  padding: 1.8rem;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.04);
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  border: 1px solid rgba(0,0,0,0.06);
+  transition: box-shadow 0.3s ease, transform 0.3s ease;
+  height: 100%;
+}
+
+.google-review-card:hover {
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08);
+  transform: translateY(-3px);
+}
+
+.gr-header {
   display: flex;
   align-items: center;
-  gap: 0;
-  position: relative;
+  gap: 1rem;
 }
 
-/* Left aligned - image left, text right */
-.testimonial-left {
-  flex-direction: row;
-}
-
-/* Right aligned - text left, image right */
-.testimonial-right {
-  flex-direction: row-reverse;
-}
-
-.testimonial-right .testimonial-content {
-  text-align: right;
-  align-items: flex-end;
-}
-
-.testimonial-right .quote-icon {
-  right: auto;
-  left: auto;
-}
-
-/* Image Wrapper */
-.testimonial-image-wrapper {
-  position: relative;
-  flex-shrink: 0;
-  width: 200px;
-  height: 260px;
+.gr-avatar {
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  color: #fff;
   display: flex;
-  align-items: flex-end;
+  align-items: center;
   justify-content: center;
+  font-size: 1.1rem;
+  font-weight: 600;
+  flex-shrink: 0;
 }
 
-.testimonial-blob {
-  position: absolute;
-  bottom: 0;
-  width: 180px;
-  height: 200px;
-  background: var(--bg-secondary);
-  border-radius: 40% 60% 55% 45% / 50% 45% 55% 50%;
-  z-index: 0;
-}
-
-.testimonial-image {
-  position: relative;
-  z-index: 1;
-  width: 170px;
-  height: 240px;
-  object-fit: cover;
-  object-position: top;
-}
-
-/* Content */
-.testimonial-content {
+.gr-user-info {
   flex: 1;
   display: flex;
   flex-direction: column;
-  align-items: flex-start;
-  position: relative;
-  padding: 1rem 0;
+  justify-content: center;
 }
 
-.quote-icon {
-  font-size: 4rem;
-  font-weight: 800;
-  line-height: 1;
-  color: var(--accent-primary);
-  opacity: 0.3;
-  margin-bottom: -1rem;
-}
-
-.testimonial-quote {
-  font-size: 0.9rem;
-  line-height: 1.7;
-  color: var(--text-secondary);
-  margin-bottom: 1rem;
-}
-
-.testimonial-author {
-  display: flex;
-  flex-direction: column;
-  gap: 0.15rem;
-}
-
-.testimonial-name {
+.gr-name {
+  font-weight: 600;
+  color: #202124;
   font-size: 1rem;
-  font-weight: 700;
-  color: var(--accent-primary);
+  line-height: 1.2;
 }
 
-.testimonial-company {
+.gr-date {
   font-size: 0.8rem;
-  color: var(--text-secondary);
-  font-style: italic;
+  color: #70757a;
+  margin-top: 3px;
 }
 
-.testimonial-stars {
+.gr-google-icon {
+  width: 24px;
+  height: 24px;
+  flex-shrink: 0;
+}
+
+.gr-stars {
   display: flex;
   gap: 2px;
-  margin-top: 0.25rem;
+  margin-bottom: 0.2rem;
 }
 
-.testimonial-right .testimonial-stars {
-  justify-content: flex-end;
+.gr-stars .star {
+  font-size: 1.2rem;
+  line-height: 1;
 }
 
-.testimonial-stars .star.filled {
-  color: #f59e0b;
-  font-size: 1rem;
+.gr-stars .star.filled {
+  color: #fbbc04;
+}
+
+.gr-stars .star.empty {
+  color: #e0e0e0;
+}
+
+.gr-text {
+  font-size: 0.95rem;
+  line-height: 1.6;
+  color: #3c4043;
+  margin: 0;
+}
+
+/* Carousel Indicators */
+.carousel-indicators {
+  display: flex;
+  justify-content: center;
+  gap: 0.6rem;
+  margin-top: 2.5rem;
+}
+
+.carousel-indicators .indicator {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background-color: #d1d5db; /* neutral gray */
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.carousel-indicators .indicator:hover {
+  background-color: #9ca3af;
+}
+
+.carousel-indicators .indicator.active {
+  background-color: var(--accent-primary, #f59e0b);
+  width: 24px;
+  border-radius: 4px;
 }
 
 /* Responsive */
-@media (max-width: 1024px) {
+@media (max-width: 768px) {
   .testimonials-grid {
     grid-template-columns: 1fr;
-    gap: 2.5rem;
+    max-width: 500px;
   }
-}
-
-@media (max-width: 768px) {
-  .testimonial-card {
-    flex-direction: column !important;
-    text-align: center;
+  
+  .hide-on-mobile {
+    display: none !important;
   }
-
-  .testimonial-right .testimonial-content {
-    text-align: center;
-    align-items: center;
+  
+  .google-review-card {
+    padding: 1.5rem;
   }
-
-  .testimonial-content {
-    align-items: center;
-  }
-
-  .testimonial-right .testimonial-stars {
-    justify-content: center;
-  }
-
-  .testimonial-image-wrapper {
-    width: 160px;
-    height: 210px;
-  }
-
-  .testimonial-image {
-    width: 140px;
-    height: 200px;
-  }
-
-  .testimonial-blob {
-    width: 150px;
-    height: 170px;
-  }
-
+  
   .testimonials-header h2 {
-    font-size: 1.5rem;
+    font-size: 1.6rem;
   }
 }
