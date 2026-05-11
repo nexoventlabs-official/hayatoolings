@@ -1,10 +1,18 @@
 // Lightweight fetch wrapper for the Haya Toolings backend.
 // The base URL can be overridden via `VITE_API_BASE` at build time.
 
-const RAW_BASE = (import.meta.env && import.meta.env.VITE_API_BASE) || 'http://localhost:5000';
+let RAW_BASE = (import.meta.env && import.meta.env.VITE_API_BASE) || 'http://localhost:5000';
 // Strip trailing slash AND a trailing "/api" if the operator accidentally
 // included it (our request paths already start with "/api/...").
-export const API_BASE = RAW_BASE.replace(/\/$/, '').replace(/\/api$/, '');
+RAW_BASE = RAW_BASE.replace(/\/$/, '').replace(/\/api$/, '');
+// The deployed Render service is `hayatoolings.onrender.com`, not
+// `hayatoolings-backend.onrender.com`. Auto-correct the common typo so
+// production keeps working even if VITE_API_BASE is misconfigured.
+RAW_BASE = RAW_BASE.replace(
+  /\/\/hayatoolings-backend\.onrender\.com/,
+  '//hayatoolings.onrender.com'
+);
+export const API_BASE = RAW_BASE;
 
 const TOKEN_KEY = 'ht_admin_token';
 
