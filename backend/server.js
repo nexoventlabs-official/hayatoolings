@@ -84,13 +84,46 @@ app.use('/api', apiLimiter);
 
 app.get('/api/health', (_req, res) => res.json({ ok: true, env: process.env.NODE_ENV || 'development' }));
 
+// Friendly root + /api index so opening the bare URL in a browser doesn't
+// look like a crash. Also silences favicon 404 noise.
+const API_INDEX = {
+  name: 'hayatoolings-backend',
+  status: 'ok',
+  env: process.env.NODE_ENV || 'development',
+  endpoints: [
+    'GET  /api/health',
+    'GET  /api/meta/countries',
+    'GET  /api/meta/config',
+    'POST /api/orders',
+    'GET  /api/orders/:orderId',
+    'GET  /api/payments/payglocal/button?currency=INR|USD|EUR',
+    'GET  /api/payments/payglocal/return',
+    'POST /api/payments/payglocal/return',
+    'POST /api/payments/payglocal/webhook',
+    'POST /api/enquiries',
+    'POST /api/admin/login',
+    'GET  /api/admin/me',
+    'GET  /api/admin/stats',
+    'GET  /api/admin/orders',
+    'GET  /api/admin/orders/:orderId',
+    'PATCH /api/admin/orders/:orderId',
+    'GET  /api/admin/transactions',
+    'PATCH /api/admin/transactions/:txnId',
+    'GET  /api/admin/enquiries',
+    'PATCH /api/admin/enquiries/:id',
+  ],
+};
+app.get('/', (_req, res) => res.json(API_INDEX));
+app.get('/api', (_req, res) => res.json(API_INDEX));
+app.get('/favicon.ico', (_req, res) => res.status(204).end());
+
 app.use('/api/meta', metaRouter);
 app.use('/api/admin', adminRouter);
 app.use('/api/orders', ordersRouter);
 app.use('/api/payments', paymentsRouter);
 app.use('/api/enquiries', enquiriesRouter);
 
-app.use((_req, res) => res.status(404).json({ error: 'Not found' }));
+app.use((req, res) => res.status(404).json({ error: 'Not found', path: req.originalUrl, method: req.method }));
 app.use((err, _req, res, _next) => {
   console.error('[error]', err);
   res.status(err.status || 500).json({ error: err.message || 'Server error' });
