@@ -14,11 +14,61 @@ const enquiriesRouter = require('./routes/enquiries');
 
 const app = express();
 
-app.use(cors({ origin: true, credentials: true }));
+// Render / Vercel sit behind a proxy. Trust it so express-rate-limit
+// and `req.ip` see the real client IP from X-Forwarded-For.
+app.set('trust proxy', 1);
+
+// --- CORS ---
+// Allow the configured storefront, any *.vercel.app preview deployment,
+// and local dev origins.
+const STATIC_ALLOWED = new Set(
+  [
+    process.env.FRONTEND_URL,
+    'http://localhost:5173',
+    'http://localhost:4173',
+    'http://127.0.0.1:5173',
+  ].filter(Boolean).map((s) => s.replace(/\/$/, ''))
+);
+
+function isOriginAllowed(origin) {
+  if (!origin) return true; // server-to-server / curl
+  const cleaned = origin.replace(/\/$/, '');
+  if (STATIC_ALLOWED.has(cleaned)) return true;
+  try {
+    const host = new URL(cleaned).hostname;
+    if (host.endsWith('.vercel.app')) return true;
+    if (host === 'localhost' || host === '127.0.0.1') return true;
+  } catch (_) { /* invalid origin */ }
+  return false;
+}
+
+const corsOptions = {
+  origin: (origin, cb) => {
+    if (isOriginAllowed(origin)) return cb(null, true);
+    return cb(new Error(`Origin ${origin} not allowed by CORS`));
+  },
+  credentials: true,
+  methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization'],
+  maxAge: 86400,
+};
+
+app.use(cors(corsOptions));
+// Explicitly handle preflight for every route so a slow / errored
+// downstream handler can never strip the CORS headers.
+app.options('*', cors(corsOptions));
+
 app.use(express.json({ limit: '1mb' }));
 app.use(morgan('dev'));
 
-const apiLimiter = rateLimit({ windowMs: 60_000, max: 200, standardHeaders: true, legacyHeaders: false });
+// Rate limit `/api`, but never count preflight requests.
+const apiLimiter = rateLimit({
+  windowMs: 60_000,
+  max: 200,
+  standardHeaders: true,
+  legacyHeaders: false,
+  skip: (req) => req.method === 'OPTIONS',
+});
 app.use('/api', apiLimiter);
 
 app.get('/api/health', (_req, res) => res.json({ ok: true, env: process.env.NODE_ENV || 'development' }));
