@@ -96,6 +96,72 @@ const applyPrefill = (p) => {
   return filled;
 };
 
+// --- PayGlocal popup result watcher --------------------------------------
+//
+// PayGlocal's hosted popup shows a green tick + "Your transaction of X was
+// successful!" on success and equivalent text on failure. Because the Simple-
+// Pay embed renders the popup inside our DOM (not in a cross-origin iframe)
+// we can detect the outcome and call the callback exactly once.
+//
+// The callback receives { status: 'success' | 'failed', gid }. `gid` is the
+// PayGlocal transaction id that the popup prints under the merchant name
+// (e.g. "Txn ID: 63E33BF6FDD54A8E").
+
+// Match "transaction ... was successful" but NOT "was not successful" /
+// "unsuccessful" — the negative lookbehind prevents false positives.
+const SUCCESS_RE = /\btransaction\b[^.\n]{0,80}\bwas\s+successful\b|\bpayment\s+successful\b|\bpayment\s+received\b/i;
+
+// Failure is matched broadly: classic "transaction/payment X" phrases AND any
+// of the common issuer-decline reasons that PayGlocal may show in lieu of a
+// transaction-level message (insufficient funds, card declined, etc.).
+const FAILURE_RE = new RegExp(
+  [
+    String.raw`\btransaction[^.\n]{0,80}(failed|unsuccessful|declined|cancelled|canceled|not\s+successful)\b`,
+    String.raw`\bpayment[^.\n]{0,80}(failed|unsuccessful|declined|cancelled|canceled|not\s+successful)\b`,
+    String.raw`\binsufficient\s+(funds|balance)\b`,
+    String.raw`\bcard\s+declined\b`,
+    String.raw`\bdeclined\s+by\s+(issuer|bank)\b`,
+    String.raw`\bdo\s+not\s+hono(u)?r\b`,
+    String.raw`\b(unable\s+to\s+process|transaction\s+aborted)\b`,
+  ].join('|'),
+  'i'
+);
+
+const TXN_ID_RE = /Txn\s*ID[:\s]+([A-Za-z0-9-]+)/i;
+
+const watchPayglocalResult = (onResult) => {
+  if (!onResult) return () => {};
+  let done = false;
+  const scan = () => {
+    if (done) return;
+    const text = document.body.innerText || '';
+    const txn = text.match(TXN_ID_RE);
+    const gid = txn ? txn[1] : undefined;
+    // IMPORTANT: check FAILURE_RE first so a popup that shows both "Txn ID:
+    // ..." (which happens to contain "ID" — harmless) and "Card declined" is
+    // classified correctly. We also want a phrase like "was not successful"
+    // to land in the failure branch even though SUCCESS_RE now excludes it.
+    if (FAILURE_RE.test(text)) {
+      done = true;
+      observer.disconnect();
+      clearTimeout(timer);
+      onResult({ status: 'failed', gid });
+    } else if (SUCCESS_RE.test(text)) {
+      done = true;
+      observer.disconnect();
+      clearTimeout(timer);
+      onResult({ status: 'success', gid });
+    }
+  };
+  const observer = new MutationObserver(scan);
+  observer.observe(document.body, { childList: true, subtree: true, characterData: true });
+  // Initial scan in case the result text is already on screen.
+  scan();
+  // Give up after 15 minutes — well past any reasonable payment session.
+  const timer = setTimeout(() => { observer.disconnect(); done = true; }, 15 * 60 * 1000);
+  return () => { observer.disconnect(); done = true; clearTimeout(timer); };
+};
+
 // Watch the DOM until the popup inputs appear, then prefill them. Stops on
 // success or after a timeout so it can't leak observers.
 const schedulePrefill = (prefill) => {
@@ -128,12 +194,14 @@ const schedulePrefill = (prefill) => {
  * After the PayGlocal popup mounts, we push amount / email / phone values
  * into its inputs using the native value setter — see schedulePrefill().
  */
-const PayGlocalButton = ({ pbId, prefill }) => {
+const PayGlocalButton = ({ pbId, prefill, onResult }) => {
   const ref = useRef(null);
-  // Keep latest prefill in a ref so we don't have to re-run the script-mount
+  // Keep latest props in refs so we don't have to re-run the script-mount
   // effect (PayGlocal's simple.js is not idempotent).
   const prefillRef = useRef(prefill);
   useEffect(() => { prefillRef.current = prefill; }, [prefill]);
+  const onResultRef = useRef(onResult);
+  useEffect(() => { onResultRef.current = onResult; }, [onResult]);
 
   useEffect(() => {
     if (!ref.current || !pbId) return;
@@ -151,13 +219,24 @@ const PayGlocalButton = ({ pbId, prefill }) => {
     form.appendChild(script);
     ref.current.appendChild(form);
 
-    // Watch the DOM for PayGlocal's popup mounting; once it appears, push
-    // the amount/email/phone values into its inputs.
+    // On the first click we (a) start prefilling the popup once it mounts and
+    // (b) start watching for the final "successful / failed" outcome so we
+    // can sync our backend and redirect the user.
     const el = ref.current;
-    const onClick = () => schedulePrefill(prefillRef.current);
+    let stopWatcher = null;
+    const onClick = () => {
+      schedulePrefill(prefillRef.current);
+      if (!stopWatcher) {
+        stopWatcher = watchPayglocalResult((result) => {
+          stopWatcher = null;
+          onResultRef.current?.(result);
+        });
+      }
+    };
     el.addEventListener('click', onClick);
     return () => {
       el.removeEventListener('click', onClick);
+      if (stopWatcher) stopWatcher();
     };
   }, [pbId]);
 
@@ -165,7 +244,7 @@ const PayGlocalButton = ({ pbId, prefill }) => {
 };
 
 const Checkout = () => {
-  const { cart, removeFromCart, updateQuantity, cartTotal } = useCart();
+  const { cart, removeFromCart, updateQuantity, cartTotal, clearCart } = useCart();
   const navigate = useNavigate();
   const { currency, format, convert, paygButtons, symbols } = useCurrency();
 
@@ -248,6 +327,22 @@ const Checkout = () => {
       if (!effectiveMethod) return;
       submitOrder();
     }
+  };
+
+  // Called once watchPayglocalResult detects "successful" or "failed" inside
+  // PayGlocal's popup. We push the outcome to our backend so the admin panel
+  // updates immediately (the webhook would do the same a few seconds later)
+  // and then send the customer to the order-confirmation page.
+  const handlePaymentResult = async ({ status, gid }) => {
+    if (!createdOrder) return;
+    const orderId = createdOrder.order.orderId;
+    try {
+      await api.postReturn({ orderId, status, gid });
+    } catch {
+      // Non-fatal: the PayGlocal webhook will reconcile.
+    }
+    if (status === 'success') clearCart();
+    navigate(`/order/${encodeURIComponent(orderId)}?status=${status}`);
   };
 
   if (cart.length === 0 && step !== 3) {
@@ -395,6 +490,7 @@ const Checkout = () => {
                     <div className="payglocal-embed">
                       <PayGlocalButton
                         pbId={paygPbId}
+                        onResult={handlePaymentResult}
                         prefill={{
                           amount: totalDisplay,
                           currency,
