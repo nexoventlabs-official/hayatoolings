@@ -2,7 +2,9 @@
 // The base URL can be overridden via `VITE_API_BASE` at build time.
 
 const RAW_BASE = (import.meta.env && import.meta.env.VITE_API_BASE) || 'http://localhost:5000';
-export const API_BASE = RAW_BASE.replace(/\/$/, '');
+// Strip trailing slash AND a trailing "/api" if the operator accidentally
+// included it (our request paths already start with "/api/...").
+export const API_BASE = RAW_BASE.replace(/\/$/, '').replace(/\/api$/, '');
 
 const TOKEN_KEY = 'ht_admin_token';
 
