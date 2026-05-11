@@ -6,6 +6,17 @@ const jwt = require('jsonwebtoken');
 let cachedKey = null;
 function getPublicKey() {
   if (cachedKey !== null) return cachedKey;
+
+  // 1) Prefer the inline PAYGLOCAL_PUBLIC_KEY env var. Accepts either a
+  //    real multi-line PEM (dotenv v16 quoted-multiline) or a single-line
+  //    string with literal "\n" escapes that we expand to newlines.
+  const inline = process.env.PAYGLOCAL_PUBLIC_KEY;
+  if (inline && inline.trim()) {
+    cachedKey = inline.includes('\\n') ? inline.replace(/\\n/g, '\n') : inline;
+    return cachedKey;
+  }
+
+  // 2) Fallback: read from PAYGLOCAL_PUBLIC_KEY_FILE.
   try {
     const file = process.env.PAYGLOCAL_PUBLIC_KEY_FILE;
     if (!file) return (cachedKey = '');

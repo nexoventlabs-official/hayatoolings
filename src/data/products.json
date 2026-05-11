@@ -364,5 +364,12 @@
       "1.1/8 × 12 UNF HSS-E Tap",
       "16ER 1.5 ISO Threading Insert (10 pcs)"
     ]
+  },
+  {
+    "id": 45,
+    "name": "₹1 Test Product — Payment Smoke Test",
+    "price": 1,
+    "image": "/products/19.jpg",
+    "description": "Internal test SKU priced at ₹1 (≈ $0.01 / €0.01). Use this to smoke-test the live PayGlocal flow end-to-end — a real charge is created, the webhook fires, and the admin panel updates — all without spending real money. Hide this from the storefront before going public."
   }
 ]
