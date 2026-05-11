@@ -1,13 +1,28 @@
 import React, { useState } from 'react';
-import { Send, FileText } from 'lucide-react';
+import { Send, FileText, AlertCircle } from 'lucide-react';
+import { api } from '../lib/api';
 import './FormPages.css';
 
 const QuoteRequest = () => {
   const [submitted, setSubmitted] = useState(false);
+  const [submitting, setSubmitting] = useState(false);
+  const [error, setError] = useState('');
+  const [form, setForm] = useState({ name: '', company: '', email: '', phone: '', message: '' });
 
-  const handleSubmit = (e) => {
+  const handleField = (k) => (e) => setForm((s) => ({ ...s, [k]: e.target.value }));
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    setSubmitted(true);
+    setSubmitting(true);
+    setError('');
+    try {
+      await api.submitEnquiry({ type: 'quote', ...form });
+      setSubmitted(true);
+    } catch (err) {
+      setError(err.message || 'Could not submit your request');
+    } finally {
+      setSubmitting(false);
+    }
   };
 
   return (
@@ -30,35 +45,40 @@ const QuoteRequest = () => {
             </div>
           ) : (
             <form onSubmit={handleSubmit} className="quote-form">
+              {error && (
+                <div className="checkout-error" style={{ marginBottom: '1rem' }}>
+                  <AlertCircle size={18} /> <span>{error}</span>
+                </div>
+              )}
               <div className="grid grid-cols-2 gap-6 mb-6">
                 <div className="input-group">
                   <label className="input-label">Full Name</label>
-                  <input type="text" className="input-field" required placeholder="John Doe" />
+                  <input type="text" className="input-field" required placeholder="John Doe" value={form.name} onChange={handleField('name')} />
                 </div>
                 <div className="input-group">
                   <label className="input-label">Company Name</label>
-                  <input type="text" className="input-field" placeholder="Acme Corp" />
+                  <input type="text" className="input-field" placeholder="Acme Corp" value={form.company} onChange={handleField('company')} />
                 </div>
               </div>
-              
+
               <div className="grid grid-cols-2 gap-6 mb-6">
                 <div className="input-group">
                   <label className="input-label">Email Address</label>
-                  <input type="email" className="input-field" required placeholder="john@example.com" />
+                  <input type="email" className="input-field" required placeholder="john@example.com" value={form.email} onChange={handleField('email')} />
                 </div>
                 <div className="input-group">
                   <label className="input-label">Phone Number</label>
-                  <input type="tel" className="input-field" required placeholder="+91 00000 00000" />
+                  <input type="tel" className="input-field" required placeholder="+91 00000 00000" value={form.phone} onChange={handleField('phone')} />
                 </div>
               </div>
 
               <div className="input-group mb-6">
                 <label className="input-label">Required Items & Quantities</label>
-                <textarea className="input-field" rows="5" required placeholder="e.g. 10x 16MM CARBIDE BORING BAR..."></textarea>
+                <textarea className="input-field" rows="5" required placeholder="e.g. 10x 16MM CARBIDE BORING BAR..." value={form.message} onChange={handleField('message')}></textarea>
               </div>
 
-              <button type="submit" className="btn btn-primary w-full justify-center">
-                <FileText size={18} /> Submit Request
+              <button type="submit" className="btn btn-primary w-full justify-center" disabled={submitting}>
+                <FileText size={18} /> {submitting ? 'Submitting...' : 'Submit Request'}
               </button>
             </form>
           )}

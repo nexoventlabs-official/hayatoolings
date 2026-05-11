@@ -1,8 +1,31 @@
-import React from 'react';
-import { MapPin, Phone, Mail, Clock } from 'lucide-react';
+import React, { useState } from 'react';
+import { MapPin, Phone, Mail, Clock, Send, AlertCircle } from 'lucide-react';
+import { api } from '../lib/api';
 import './FormPages.css';
 
 const Contact = () => {
+  const [form, setForm] = useState({ name: '', email: '', phone: '', subject: '', message: '' });
+  const [submitting, setSubmitting] = useState(false);
+  const [submitted, setSubmitted] = useState(false);
+  const [error, setError] = useState('');
+
+  const handleField = (k) => (e) => setForm((s) => ({ ...s, [k]: e.target.value }));
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setSubmitting(true);
+    setError('');
+    try {
+      await api.submitEnquiry({ type: 'contact', ...form });
+      setSubmitted(true);
+      setForm({ name: '', email: '', phone: '', subject: '', message: '' });
+    } catch (err) {
+      setError(err.message || 'Could not send your message');
+    } finally {
+      setSubmitting(false);
+    }
+  };
+
   return (
     <div className="form-page section">
       <div className="container">
@@ -50,13 +73,47 @@ const Contact = () => {
             </div>
           </div>
 
-          <div className="map-container glass rounded-xl animate-fade-in delay-200">
-            {/* Simulated Map Area */}
-            <div className="simulated-map">
-              <MapPin size={48} className="text-accent map-pin" />
-              <div className="pulse-ring"></div>
-              <p className="map-text">Haya Toolings H.Q.</p>
-            </div>
+          <div className="contact-info glass p-8 rounded-xl animate-fade-in delay-200">
+            <h3 className="h3 mb-6">Send us a Message</h3>
+            {submitted ? (
+              <div className="success-message text-center py-6">
+                <div className="success-icon mb-3"><Send size={40} className="text-accent mx-auto" /></div>
+                <h4 className="font-semibold mb-2">Message sent!</h4>
+                <p className="text-secondary">We will get back to you shortly.</p>
+                <button className="btn btn-outline mt-4" onClick={() => setSubmitted(false)}>Send another</button>
+              </div>
+            ) : (
+              <form onSubmit={handleSubmit}>
+                {error && (
+                  <div className="checkout-error" style={{ marginBottom: '1rem' }}>
+                    <AlertCircle size={18} /> <span>{error}</span>
+                  </div>
+                )}
+                <div className="input-group">
+                  <label className="input-label">Name</label>
+                  <input className="input-field" required value={form.name} onChange={handleField('name')} />
+                </div>
+                <div className="input-group">
+                  <label className="input-label">Email</label>
+                  <input type="email" className="input-field" required value={form.email} onChange={handleField('email')} />
+                </div>
+                <div className="input-group">
+                  <label className="input-label">Phone</label>
+                  <input type="tel" className="input-field" value={form.phone} onChange={handleField('phone')} />
+                </div>
+                <div className="input-group">
+                  <label className="input-label">Subject</label>
+                  <input className="input-field" value={form.subject} onChange={handleField('subject')} />
+                </div>
+                <div className="input-group">
+                  <label className="input-label">Message</label>
+                  <textarea className="input-field" rows={4} required value={form.message} onChange={handleField('message')} />
+                </div>
+                <button type="submit" className="btn btn-primary w-full justify-center" disabled={submitting}>
+                  <Send size={16} /> {submitting ? 'Sending...' : 'Send Message'}
+                </button>
+              </form>
+            )}
           </div>
         </div>
       </div>

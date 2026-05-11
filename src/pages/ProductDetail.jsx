@@ -2,6 +2,7 @@ import React, { useMemo } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { ShoppingCart, Minus, Plus, Truck, Shield, RotateCcw, ChevronRight } from 'lucide-react';
 import { useCart } from '../context/CartContext';
+import { useCurrency } from '../context/CurrencyContext';
 import ProductCard from '../components/ProductCard';
 import productsData from '../data/products.json';
 import './ProductDetail.css';
@@ -27,13 +28,12 @@ const categorizeProduct = (name) => {
 const ProductDetail = () => {
   const { id } = useParams();
   const { addToCart, cart, updateQuantity } = useCart();
+  const { format } = useCurrency();
 
   const product = productsData.find(p => p.id === parseInt(id));
   const cartItem = cart.find(item => item.id === product?.id);
 
-  const formattedPrice = product
-    ? new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR' }).format(product.price)
-    : '';
+  const formattedPrice = product ? format(product.price) : '';
 
   const category = product ? categorizeProduct(product.name) : '';
 

@@ -12,6 +12,13 @@ dist
 dist-ssr
 *.local
 
+# Environment variables — NEVER commit real values.
+# `.env.example` files with placeholders are tracked; real `.env` files are not.
+.env
+.env.*
+!.env.example
+!.env.*.example
+
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json

@@ -99,6 +99,31 @@
   color: var(--text-primary);
 }
 
+.currency-switcher {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  padding: 0.25rem 0.55rem;
+  color: var(--text-primary);
+}
+
+.currency-switcher select {
+  background: transparent;
+  color: inherit;
+  border: none;
+  font-size: 0.85rem;
+  font-weight: 600;
+  outline: none;
+  cursor: pointer;
+}
+
+.currency-switcher select option {
+  color: #111;
+}
+
 @media (max-width: 768px) {
   .nav-links {
     position: absolute;

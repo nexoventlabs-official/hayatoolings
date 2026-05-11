@@ -2,16 +2,14 @@ import React from 'react';
 import { ShoppingCart } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { useCart } from '../context/CartContext';
+import { useCurrency } from '../context/CurrencyContext';
 import './ProductCard.css';
 
 const ProductCard = ({ product, hideAddButton }) => {
   const { addToCart } = useCart();
-  
-  // Format price
-  const formattedPrice = new Intl.NumberFormat('en-IN', {
-    style: 'currency',
-    currency: 'INR'
-  }).format(product.price);
+  const { format } = useCurrency();
+
+  const formattedPrice = format(product.price);
 
   return (
     <div className="product-card glass animate-fade-in">

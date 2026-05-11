@@ -1,31 +1,38 @@
 import React, { useState, useEffect } from 'react';
 import { useLocation, Link } from 'react-router-dom';
 import { CheckCircle, Package, Truck, Home, Search } from 'lucide-react';
+import { api } from '../lib/api';
 import './TrackOrder.css';
+
+const STATUS_TO_STEP = {
+  placed: 1,
+  confirmed: 2,
+  shipped: 3,
+  delivered: 4,
+  cancelled: 0,
+};
 
 const TrackOrder = () => {
   const location = useLocation();
   const searchParams = new URLSearchParams(location.search);
   const initialOrderId = searchParams.get('id') || '';
-  
+
   const [orderId, setOrderId] = useState(initialOrderId);
   const [isTracking, setIsTracking] = useState(!!initialOrderId);
   const [currentStep, setCurrentStep] = useState(1);
+  const [order, setOrder] = useState(null);
+  const [error, setError] = useState('');
 
-  // Simulate progress
   useEffect(() => {
-    if (isTracking) {
-      // Logic to simulate an order moving through stages over time.
-      // For demo, we just rapidly animate through them if it's a new order.
-      setCurrentStep(1);
-      const timer1 = setTimeout(() => setCurrentStep(2), 1500);
-      const timer2 = setTimeout(() => setCurrentStep(3), 3000);
-      
-      return () => {
-        clearTimeout(timer1);
-        clearTimeout(timer2);
-      };
-    }
+    if (!isTracking || !orderId.trim()) return;
+    setError('');
+    setOrder(null);
+    api.getOrder(orderId.trim())
+      .then(({ data }) => {
+        setOrder(data);
+        setCurrentStep(STATUS_TO_STEP[data.orderStatus] || 1);
+      })
+      .catch((e) => setError(e.message || 'Order not found'));
   }, [isTracking, orderId]);
 
   const handleTrack = (e) => {
@@ -66,11 +73,18 @@ const TrackOrder = () => {
           </form>
         </div>
 
-        {isTracking && (
+        {isTracking && error && (
+          <div className="checkout-error">{error}</div>
+        )}
+
+        {isTracking && order && (
           <div className="tracking-timeline glass p-8 rounded-xl animate-fade-in">
             <div className="mb-6 border-b pb-4">
-              <h3 className="h3">Order {orderId}</h3>
-              <p className="text-secondary">Estimated Delivery: in 3 Days</p>
+              <h3 className="h3">Order {order.orderId}</h3>
+              <p className="text-secondary">
+                Status: <strong style={{ textTransform: 'capitalize' }}>{order.orderStatus}</strong>
+                {' · '}Payment: <strong style={{ textTransform: 'capitalize' }}>{order.paymentStatus}</strong>
+              </p>
             </div>
             
             <div className="timeline">

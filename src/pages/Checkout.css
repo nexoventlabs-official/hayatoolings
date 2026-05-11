@@ -317,8 +317,257 @@
   flex-wrap: wrap;
 }
 
+.checkout-error {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: #fee2e2;
+  border: 1px solid #fca5a5;
+  color: #b91c1c;
+  padding: 0.75rem 1rem;
+  border-radius: 8px;
+  margin-bottom: 1rem;
+  font-size: 0.9rem;
+}
+
+.summary-currency-note {
+  margin-top: 0.5rem;
+  font-size: 0.8rem;
+  color: var(--text-secondary);
+  text-align: right;
+}
+
+/* ==== PayGlocal payment screen (step 3) ==== */
+.payg-screen {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.payg-hero {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.payg-hero-icon {
+  width: 52px;
+  height: 52px;
+  border-radius: 14px;
+  background: linear-gradient(135deg, #d32f2f 0%, #ff6b35 100%);
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  box-shadow: 0 8px 24px rgba(211, 47, 47, 0.28);
+}
+
+.payg-amount-card {
+  background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+  color: #f1f5f9;
+  border-radius: 14px;
+  padding: 1.4rem 1.5rem;
+  box-shadow: 0 8px 24px rgba(15, 23, 42, 0.18);
+}
+
+.payg-amount-row {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.payg-amount-label {
+  text-transform: uppercase;
+  font-size: 0.72rem;
+  letter-spacing: 0.1em;
+  color: #94a3b8;
+}
+
+.payg-amount-value {
+  font-size: 2rem;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  color: #fff;
+}
+
+.payg-amount-value small {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #f97316;
+  margin-left: 0.35rem;
+  letter-spacing: 0.06em;
+}
+
+.payg-meta {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0.75rem;
+  padding-top: 1rem;
+  border-top: 1px solid rgba(148, 163, 184, 0.18);
+}
+
+.payg-meta > div {
+  display: flex;
+  flex-direction: column;
+  gap: 0.18rem;
+  min-width: 0;
+}
+
+.payg-meta span {
+  font-size: 0.68rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: #94a3b8;
+}
+
+.payg-meta strong {
+  font-size: 0.88rem;
+  color: #f1f5f9;
+  font-weight: 600;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  min-width: 0;
+  word-break: break-all;
+}
+
+.payg-copy {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 22px;
+  height: 22px;
+  border-radius: 6px;
+  background: rgba(255, 255, 255, 0.08);
+  color: #cbd5e1;
+  border: 0;
+  cursor: pointer;
+  transition: background 0.15s, color 0.15s;
+  flex-shrink: 0;
+}
+
+.payg-copy:hover {
+  background: rgba(255, 255, 255, 0.14);
+  color: #fff;
+}
+
+.payg-card {
+  background: #fff;
+  border: 1px solid var(--border-color);
+  border-radius: 14px;
+  overflow: hidden;
+}
+
+.payg-card-header {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1.25rem;
+  background: #f8fafc;
+  color: #475569;
+  font-size: 0.8rem;
+  font-weight: 500;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.payg-card-header svg {
+  color: #16a34a;
+  flex-shrink: 0;
+}
+
+.payglocal-embed {
+  padding: 2rem 1.5rem 1.25rem;
+  display: flex;
+  justify-content: center;
+  background: linear-gradient(180deg, #ffffff 0%, #f8fafc 100%);
+}
+
+.payglocal-embed > div {
+  width: 100%;
+  max-width: 360px;
+  display: flex;
+  justify-content: center;
+}
+
+.payg-trust {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.55rem;
+  padding: 0.75rem 1rem;
+  font-size: 0.72rem;
+  color: #64748b;
+  border-top: 1px solid var(--border-color);
+  background: #fafafa;
+  flex-wrap: wrap;
+}
+
+.payg-trust span {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+}
+
+.payg-return {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 1.1rem 1.25rem;
+  border-radius: 12px;
+  background: #fff8e1;
+  border: 1px dashed #fbbf24;
+  flex-wrap: wrap;
+}
+
+.payg-return strong {
+  display: block;
+  font-size: 0.95rem;
+  color: #78350f;
+}
+
+.payg-return p {
+  margin: 0.15rem 0 0;
+  font-size: 0.83rem;
+  color: #92400e;
+  max-width: 380px;
+}
+
+.payg-return .btn {
+  flex-shrink: 0;
+}
+
+/* Override the default 3-equal-column grid so the left payment panel
+   gets the lion's share and the right summary becomes a compact sidebar. */
+.checkout-layout {
+  grid-template-columns: minmax(0, 1fr) 320px !important;
+  align-items: start;
+}
+
+.checkout-layout .col-span-2 {
+  grid-column: span 1 / span 1; /* left column now naturally fills the 1fr */
+  min-width: 0;
+}
+
+.order-summary {
+  width: 100%;
+}
+
 @media (max-width: 992px) {
   .checkout-layout {
-    grid-template-columns: 1fr;
+    grid-template-columns: 1fr !important;
   }
+  .order-summary { max-width: 100%; }
+}
+
+@media (max-width: 600px) {
+  .payg-meta { grid-template-columns: 1fr 1fr; }
+  .payg-amount-value { font-size: 1.6rem; }
+  .payg-return { flex-direction: column; align-items: flex-start; }
+  .payg-return .btn { width: 100%; justify-content: center; }
 }

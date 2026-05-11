@@ -1,11 +1,13 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { ShoppingCart, Wrench, Menu } from 'lucide-react';
+import { ShoppingCart, Wrench, Menu, Globe } from 'lucide-react';
 import { useCart } from '../context/CartContext';
+import { useCurrency } from '../context/CurrencyContext';
 import './Header.css';
 
 const Header = () => {
   const { cartCount } = useCart();
+  const { currency, setCurrency } = useCurrency();
   const [isMenuOpen, setIsMenuOpen] = React.useState(false);
 
   return (
@@ -25,6 +27,18 @@ const Header = () => {
         </nav>
 
         <div className="header-actions">
+          <div className="currency-switcher" title="Display currency">
+            <Globe size={16} />
+            <select
+              aria-label="Select currency"
+              value={currency}
+              onChange={(e) => setCurrency(e.target.value)}
+            >
+              <option value="INR">INR ₹</option>
+              <option value="USD">USD $</option>
+              <option value="EUR">EUR €</option>
+            </select>
+          </div>
           <Link to="/checkout" className="cart-btn">
             <ShoppingCart size={24} />
             {cartCount > 0 && <span className="cart-badge">{cartCount}</span>}
