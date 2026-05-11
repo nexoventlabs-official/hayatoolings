@@ -19,16 +19,27 @@ const app = express();
 app.set('trust proxy', 1);
 
 // --- CORS ---
-// Allow the configured storefront, any *.vercel.app preview deployment,
-// and local dev origins.
+// FRONTEND_URL accepts a single URL or a comma-separated list of URLs.
+// All of these are allowed: every URL in FRONTEND_URL, any *.vercel.app
+// preview deployment, the production custom domain hayatoolings.online
+// (and any subdomain of it), plus local dev origins.
+const FRONTEND_URLS = (process.env.FRONTEND_URL || '')
+  .split(',')
+  .map((s) => s.trim())
+  .filter(Boolean);
+
 const STATIC_ALLOWED = new Set(
   [
-    process.env.FRONTEND_URL,
+    ...FRONTEND_URLS,
     'http://localhost:5173',
     'http://localhost:4173',
     'http://127.0.0.1:5173',
-  ].filter(Boolean).map((s) => s.replace(/\/$/, ''))
+  ].map((s) => s.replace(/\/$/, ''))
 );
+
+// Hostnames whose origin (with any scheme) is always allowed.
+const ALLOWED_HOST_SUFFIXES = ['.vercel.app', '.hayatoolings.online'];
+const ALLOWED_HOSTS = ['hayatoolings.online', 'localhost', '127.0.0.1'];
 
 function isOriginAllowed(origin) {
   if (!origin) return true; // server-to-server / curl
@@ -36,8 +47,8 @@ function isOriginAllowed(origin) {
   if (STATIC_ALLOWED.has(cleaned)) return true;
   try {
     const host = new URL(cleaned).hostname;
-    if (host.endsWith('.vercel.app')) return true;
-    if (host === 'localhost' || host === '127.0.0.1') return true;
+    if (ALLOWED_HOSTS.includes(host)) return true;
+    if (ALLOWED_HOST_SUFFIXES.some((s) => host.endsWith(s))) return true;
   } catch (_) { /* invalid origin */ }
   return false;
 }
