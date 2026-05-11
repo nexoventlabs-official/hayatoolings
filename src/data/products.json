@@ -2,157 +2,217 @@
   {
     "id": 1,
     "name": "0.5 HP GRINDING MACHINE",
-    "price": 6800,
+    "price": 125000,
     "image": "/products/1.png"
   },
   {
     "id": 2,
     "name": "100x150x200MM SPL JAWS",
-    "price": 12926,
+    "price": 83333,
     "image": "/products/10.png"
   },
   {
     "id": 3,
     "name": "10×12 STRAIGHT CONNECTOR",
-    "price": 122,
+    "price": 41667,
     "image": "/products/11.png"
   },
   {
     "id": 4,
     "name": "10.2X43X89 CARBIDE DRILL 2FLUTE",
-    "price": 2406,
+    "price": 83333,
     "image": "/products/12.png"
   },
   {
     "id": 5,
     "name": "10MM AIR HOSE",
-    "price": 60,
+    "price": 41667,
     "image": "/products/13.png"
   },
   {
     "id": 6,
     "name": "10MM DRILL CHUCK",
-    "price": 532,
+    "price": 41667,
     "image": "/products/14.png"
   },
   {
     "id": 7,
     "name": "10MM HSS ENDMILL",
-    "price": 280,
+    "price": 41667,
     "image": "/products/15.jpg"
   },
   {
     "id": 8,
     "name": "10 MM INSERT CUTTER tool holder-H-TECH",
-    "price": 4500,
+    "price": 83333,
     "image": "/products/16.jpg"
   },
   {
     "id": 9,
     "name": "10 MTR CABLE",
-    "price": 480,
+    "price": 41667,
     "image": "/products/18.jpg"
   },
   {
     "id": 10,
     "name": "1-1/4\" NUT",
-    "price": 65,
+    "price": 41667,
     "image": "/products/19.jpg"
   },
   {
     "id": 11,
     "name": "1.1/8X12 UNF HSS - E TAP",
-    "price": 6600,
+    "price": 83333,
     "image": "/products/2.png"
   },
   {
     "id": 12,
     "name": "1/2-12 BSW SPIRAL TAP",
-    "price": 1050,
+    "price": 41667,
     "image": "/products/20.jpg"
   },
   {
     "id": 13,
     "name": "12\"/300 MM SCALE",
-    "price": 125,
+    "price": 41667,
     "image": "/products/21.jpg"
   },
   {
     "id": 14,
     "name": "1/2 BORE THREAD TOOL",
-    "price": 90,
+    "price": 41667,
     "image": "/products/3.png"
   },
   {
     "id": 15,
     "name": "1/2\" BORING BAR RIGHT HAND",
-    "price": 385,
+    "price": 41667,
     "image": "/products/4.png"
   },
   {
     "id": 16,
     "name": "1/2 GROOVING TOOL",
-    "price": 100,
+    "price": 41667,
     "image": "/products/5.png"
   },
   {
     "id": 17,
     "name": "1/2 THREADING BAR RIGHT HAND",
-    "price": 176,
+    "price": 41667,
     "image": "/products/6.png"
   },
   {
     "id": 18,
     "name": "1/4 BORING BAR RIGHT HAND",
-    "price": 176,
+    "price": 41667,
     "image": "/products/7.png"
   },
   {
     "id": 19,
     "name": "1/4\" BSW THREAD PLUG GAUGE",
-    "price": 2585,
+    "price": 83333,
     "image": "/products/8.png"
   },
   {
     "id": 20,
     "name": "165 CHUCK T NUT",
-    "price": 400,
+    "price": 41667,
     "image": "/products/9.png"
   },
   {
     "id": 21,
     "name": "16 ER 1.5- ISO THREADING INSERT",
-    "price": 225,
+    "price": 41667,
     "image": "/products/1.png"
   },
   {
     "id": 22,
     "name": "1) MONTHLY 6 VISITS AT OUR PLANT , 2) 30MINUTES DAILY SESSION TIME FOOR NICL TEAM",
-    "price": 16000,
+    "price": 125000,
     "image": "/products/10.png"
   },
   {
     "id": 23,
     "name": "1 MTR NYLON ROPE",
-    "price": 112,
+    "price": 41667,
     "image": "/products/11.png"
   },
   {
     "id": 24,
     "name": "4\" CUT OFF WHEEL",
-    "price": 13,
+    "price": 41667,
     "image": "/products/12.png"
   },
   {
     "id": 25,
     "name": "51308 NSK JAPAN",
-    "price": 1692,
+    "price": 83333,
     "image": "/products/13.png"
   },
   {
     "id": 26,
     "name": "6001 ZZ C3 SKF INDIA",
-    "price": 175,
+    "price": 41667,
     "image": "/products/14.png"
+  },
+  {
+    "id": 27,
+    "name": "TURNING TOOL TRIO (3-IN-1: BORING BAR + THREADING BAR + GROOVING TOOL)",
+    "price": 83333,
+    "image": "/products/4.png"
+  },
+  {
+    "id": 28,
+    "name": "DRILL & CHUCK STARTER PACK (3-PIECE: 10MM DRILL CHUCK + 10MM HSS ENDMILL + 10×12 CONNECTOR)",
+    "price": 83333,
+    "image": "/products/14.png"
+  },
+  {
+    "id": 29,
+    "name": "PRECISION MEASUREMENT KIT (3-IN-1: 300MM SCALE + BSW PLUG GAUGE + ISO THREADING INSERT)",
+    "price": 41667,
+    "image": "/products/21.jpg"
+  },
+  {
+    "id": 30,
+    "name": "ADVANCED CARBIDE BUNDLE (3-PIECE: CARBIDE DRILL + INSERT CUTTER HOLDER + HSS ENDMILL)",
+    "price": 125000,
+    "image": "/products/12.png"
+  },
+  {
+    "id": 31,
+    "name": "MILLING ESSENTIALS COMBO (3-IN-1: ENDMILL + INSERT CUTTER HOLDER + DRILL CHUCK)",
+    "price": 83333,
+    "image": "/products/16.jpg"
+  },
+  {
+    "id": 32,
+    "name": "WORKSHOP MAINTENANCE KIT (3-PIECE: AIR HOSE + 10 MTR CABLE + NYLON ROPE)",
+    "price": 41667,
+    "image": "/products/13.png"
+  },
+  {
+    "id": 33,
+    "name": "INDUSTRIAL BEARING SET (3-IN-1: NSK 51308 + SKF 6001 + CHUCK T NUT)",
+    "price": 83333,
+    "image": "/products/9.png"
+  },
+  {
+    "id": 34,
+    "name": "CNC SPECIAL JAWS TRIO (3-PIECE SET 100/150/200MM)",
+    "price": 125000,
+    "image": "/products/10.png"
+  },
+  {
+    "id": 35,
+    "name": "MACHINE STARTER PACK (3-IN-1: 0.5HP GRINDER + DRILL CHUCK + SPIRAL TAP)",
+    "price": 125000,
+    "image": "/products/1.png"
+  },
+  {
+    "id": 36,
+    "name": "THREADING MASTER KIT (3-PIECE: UNF HSS TAP + THREADING INSERT + THREADING BAR)",
+    "price": 83333,
+    "image": "/products/2.png"
   }
 ]

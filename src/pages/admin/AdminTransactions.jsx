@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { Filter, Save } from 'lucide-react';
+import { Filter } from 'lucide-react';
 import { api } from '../../lib/api';
 
 const AdminTransactions = () => {
@@ -9,7 +9,6 @@ const AdminTransactions = () => {
   const [currency, setCurrency] = useState('');
   const [q, setQ] = useState('');
   const [error, setError] = useState('');
-  const [saving, setSaving] = useState({});
 
   const load = () => {
     const qs = new URLSearchParams();
@@ -22,18 +21,6 @@ const AdminTransactions = () => {
   };
 
   useEffect(() => { load(); /* eslint-disable-next-line */ }, [status, currency]);
-
-  const updateStatus = async (txnId, newStatus) => {
-    setSaving((s) => ({ ...s, [txnId]: true }));
-    try {
-      await api.adminUpdateTransaction(txnId, { status: newStatus });
-      load();
-    } catch (e) {
-      setError(e.message);
-    } finally {
-      setSaving((s) => ({ ...s, [txnId]: false }));
-    }
-  };
 
   return (
     <>
@@ -83,7 +70,6 @@ const AdminTransactions = () => {
               <th>Gateway Ref</th>
               <th>Status</th>
               <th>Created</th>
-              <th>Actions</th>
             </tr>
           </thead>
           <tbody>
@@ -99,24 +85,10 @@ const AdminTransactions = () => {
                 <td style={{ fontSize: '0.8rem' }}>{t.gatewayRef || '—'}</td>
                 <td><span className={`badge ${t.status}`}>{t.status}</span></td>
                 <td style={{ fontSize: '0.8rem', color: '#64748b' }}>{new Date(t.createdAt).toLocaleString()}</td>
-                <td>
-                  <select
-                    defaultValue=""
-                    onChange={(e) => e.target.value && updateStatus(t.txnId, e.target.value)}
-                    disabled={saving[t.txnId]}
-                  >
-                    <option value="" disabled>Set status…</option>
-                    <option value="pending">pending</option>
-                    <option value="success">success</option>
-                    <option value="failed">failed</option>
-                    <option value="refunded">refunded</option>
-                    <option value="cancelled">cancelled</option>
-                  </select>
-                </td>
               </tr>
             ))}
             {txns.length === 0 && (
-              <tr><td colSpan={8} className="admin-empty">No transactions match your filters.</td></tr>
+              <tr><td colSpan={7} className="admin-empty">No transactions match your filters.</td></tr>
             )}
           </tbody>
         </table>
