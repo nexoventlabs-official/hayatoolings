@@ -125,21 +125,15 @@ const schedulePrefill = (prefill) => {
  * Renders the PayGlocal Simple-Pay embed exactly as the merchant docs say:
  *   <form><script src="...simple.js" data-pb-id="pb_xxx"></script></form>
  *
- * The Simple-Pay popup does not officially support DOM-level prefilling, so
- * we wait until PayGlocal has rendered its modal (Redux is by then already
- * initialized) and only then push the amount / email / phone values into
- * the inputs using the native value setter — which avoids the
- * "Minified Redux error" that synchronous prefilling caused.
+ * After the PayGlocal popup mounts, we push amount / email / phone values
+ * into its inputs using the native value setter — see schedulePrefill().
  */
-const PayGlocalButton = ({ pbId, prefill, onBeforeFirstSubmit }) => {
+const PayGlocalButton = ({ pbId, prefill }) => {
   const ref = useRef(null);
-  // Keep latest callback / prefill in refs so we don't have to re-run the
-  // script-mount effect (PayGlocal's simple.js is not idempotent).
-  const cbRef = useRef(onBeforeFirstSubmit);
-  useEffect(() => { cbRef.current = onBeforeFirstSubmit; }, [onBeforeFirstSubmit]);
+  // Keep latest prefill in a ref so we don't have to re-run the script-mount
+  // effect (PayGlocal's simple.js is not idempotent).
   const prefillRef = useRef(prefill);
   useEffect(() => { prefillRef.current = prefill; }, [prefill]);
-  const interceptedRef = useRef(false);
 
   useEffect(() => {
     if (!ref.current || !pbId) return;
@@ -157,36 +151,13 @@ const PayGlocalButton = ({ pbId, prefill, onBeforeFirstSubmit }) => {
     form.appendChild(script);
     ref.current.appendChild(form);
 
-    // Capture-phase click interceptor: the first time the user clicks the
-    // PayGlocal-rendered "Pay Now" button, run our pre-submit hook (e.g.
-    // create the order in our DB) and only then re-fire the click so
-    // PayGlocal's own handler proceeds. This guarantees an Order/Transaction
-    // row only exists once the user has actually committed to paying.
+    // Watch the DOM for PayGlocal's popup mounting; once it appears, push
+    // the amount/email/phone values into its inputs.
     const el = ref.current;
-    const onCaptureClick = async (e) => {
-      if (interceptedRef.current) return; // pass-through to PayGlocal's handler
-
-      const target = e.target.closest('button, input[type="submit"], input[type="image"], a');
-      if (!target) return;
-      const cb = cbRef.current;
-      if (!cb) return;
-      e.preventDefault();
-      e.stopImmediatePropagation();
-      try {
-        await cb();
-      } catch {
-        return; // pre-submit failed; keep interceptor armed for a retry
-      }
-      interceptedRef.current = true;
-      // Start watching for the popup BEFORE the click so we don't miss the
-      // initial render.
-      schedulePrefill(prefillRef.current);
-      // Re-fire the user-intended click so PayGlocal opens its popup.
-      target.click();
-    };
-    el.addEventListener('click', onCaptureClick, { capture: true });
+    const onClick = () => schedulePrefill(prefillRef.current);
+    el.addEventListener('click', onClick);
     return () => {
-      el.removeEventListener('click', onCaptureClick, { capture: true });
+      el.removeEventListener('click', onClick);
     };
   }, [pbId]);
 
@@ -236,11 +207,12 @@ const Checkout = () => {
 
   const handleField = (k) => (e) => setShipping((s) => ({ ...s, [k]: e.target.value }));
 
-  // Creates the order on the server. Called ONLY when the user clicks the
-  // PayGlocal "Pay Now" button — so the admin dashboard never sees an order /
-  // pending transaction for a customer who just browsed the payment screen.
-  const createOrderNow = async () => {
-    if (createdOrder) return createdOrder; // idempotent: do not double-create
+  // Creates the order on the server when the user clicks "Continue to Pay".
+  // The admin panel will see this row immediately as `pending`, and its
+  // status flips to success/failed automatically once PayGlocal returns or
+  // fires its webhook (see backend/routes/payments.js).
+  const submitOrder = async () => {
+    if (createdOrder) { setStep(3); return; }
     setIsProcessing(true);
     setError('');
     try {
@@ -258,10 +230,9 @@ const Checkout = () => {
       };
       const { data } = await api.createOrder(payload);
       setCreatedOrder(data);
-      return data;
+      setStep(3);
     } catch (err) {
       setError(err.message || 'Failed to create order');
-      throw err;
     } finally {
       setIsProcessing(false);
     }
@@ -274,9 +245,8 @@ const Checkout = () => {
       return;
     }
     if (step === 2) {
-      // No backend call here — just advance to the PayGlocal step. The order
-      // is only persisted when the user actually clicks "Pay Now".
-      setStep(3);
+      if (!effectiveMethod) return;
+      submitOrder();
     }
   };
 
@@ -373,7 +343,7 @@ const Checkout = () => {
               </>
             )}
 
-            {step === 3 && (
+            {step === 3 && createdOrder && (
               <div className="payg-screen animate-fade-in">
                 <div className="payg-hero">
                   <div className="payg-hero-icon"><Lock size={26} /></div>
@@ -394,30 +364,24 @@ const Checkout = () => {
                     <div>
                       <span>Order</span>
                       <strong>
-                        {createdOrder ? (
-                          <>
-                            {createdOrder.order.orderId}
-                            <button
-                              type="button"
-                              className="payg-copy"
-                              aria-label="Copy order id"
-                              onClick={() => navigator.clipboard?.writeText(createdOrder.order.orderId)}
-                            >
-                              <Copy size={12} />
-                            </button>
-                          </>
-                        ) : (
-                          <span className="text-secondary" style={{ fontWeight: 400 }}>generated on Pay Now</span>
-                        )}
+                        {createdOrder.order.orderId}
+                        <button
+                          type="button"
+                          className="payg-copy"
+                          aria-label="Copy order id"
+                          onClick={() => navigator.clipboard?.writeText(createdOrder.order.orderId)}
+                        >
+                          <Copy size={12} />
+                        </button>
                       </strong>
                     </div>
                     <div>
                       <span>Items</span>
-                      <strong>{cart.length}</strong>
+                      <strong>{createdOrder.order.items.length}</strong>
                     </div>
                     <div>
                       <span>Customer</span>
-                      <strong>{shipping.firstName} {shipping.lastName}</strong>
+                      <strong>{createdOrder.order.shipping.firstName} {createdOrder.order.shipping.lastName}</strong>
                     </div>
                   </div>
                 </div>
@@ -428,28 +392,24 @@ const Checkout = () => {
                       <ShieldCheck size={18} />
                       <span>You'll be redirected to PayGlocal's secure hosted page</span>
                     </div>
-                    <div className="payglocal-embed" style={{ position: 'relative' }}>
+                    <div className="payglocal-embed">
                       <PayGlocalButton
                         pbId={paygPbId}
-                        onBeforeFirstSubmit={createOrderNow}
                         prefill={{
                           amount: totalDisplay,
                           currency,
-                          email: shipping.email,
-                          phone: shipping.phone,
-                          firstName: shipping.firstName,
-                          lastName: shipping.lastName,
-                          country: shipping.country,
-                          countryCode: shipping.countryCode,
-                          addressLine1: shipping.addressLine1,
-                          city: shipping.city,
-                          state: shipping.state,
-                          postalCode: shipping.postalCode,
+                          email: createdOrder.order.shipping.email,
+                          phone: createdOrder.order.shipping.phone,
+                          firstName: createdOrder.order.shipping.firstName,
+                          lastName: createdOrder.order.shipping.lastName,
+                          country: createdOrder.order.shipping.country,
+                          countryCode: createdOrder.order.shipping.countryCode,
+                          addressLine1: createdOrder.order.shipping.addressLine1,
+                          city: createdOrder.order.shipping.city,
+                          state: createdOrder.order.shipping.state,
+                          postalCode: createdOrder.order.shipping.postalCode,
                         }}
                       />
-                      {isProcessing && (
-                        <div className="payg-processing-overlay">Preparing your order…</div>
-                      )}
                     </div>
                     <div className="payg-trust">
                       <span><Lock size={12} /> 256-bit SSL</span>
@@ -513,9 +473,9 @@ const Checkout = () => {
               form={step === 1 ? 'checkout-form' : undefined}
               className="btn btn-primary w-full mt-6 justify-center"
               onClick={step === 2 ? handleNext : undefined}
-              disabled={step === 2 && !effectiveMethod}
+              disabled={isProcessing || (step === 2 && !effectiveMethod)}
             >
-              {step === 1 ? 'Proceed to Payment' : 'Continue to Pay'}
+              {isProcessing ? 'Processing…' : step === 1 ? 'Proceed to Payment' : 'Continue to Pay'}
             </button>
           )}
 
