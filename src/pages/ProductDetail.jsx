@@ -1,6 +1,6 @@
 import React, { useMemo } from 'react';
 import { useParams, Link } from 'react-router-dom';
-import { ShoppingCart, Minus, Plus, Truck, Shield, RotateCcw, ChevronRight } from 'lucide-react';
+import { ShoppingCart, Minus, Plus, Truck, Shield, RotateCcw, ChevronRight, Package } from 'lucide-react';
 import { useCart } from '../context/CartContext';
 import { useCurrency } from '../context/CurrencyContext';
 import ProductCard from '../components/ProductCard';
@@ -110,6 +110,18 @@ const ProductDetail = () => {
 
             <div className="detail-divider"></div>
 
+            {/* What's Inside (bundle products only) */}
+            {Array.isArray(product.bundleItems) && product.bundleItems.length > 0 && (
+              <div className="detail-highlights bundle-includes">
+                <h4><Package size={16} style={{ verticalAlign: '-3px', marginRight: 6 }} />What’s Inside ({product.bundleItems.length}-in-1)</h4>
+                <ul>
+                  {product.bundleItems.map((item, i) => (
+                    <li key={i}>{item}</li>
+                  ))}
+                </ul>
+              </div>
+            )}
+
             {/* Highlights */}
             <div className="detail-highlights">
               <h4>Product Highlights</h4>
@@ -181,11 +193,25 @@ const ProductDetail = () => {
         <div className="detail-description-section">
           <h3>Product Description</h3>
           <div className="description-content">
-            <p>
-              The <strong>{product.name}</strong> is a high-quality industrial tool designed for precision
-              and durability. Built to meet the demands of professional workshops and manufacturing units,
-              this product offers reliable performance in demanding conditions.
-            </p>
+            {product.description ? (
+              <p>{product.description}</p>
+            ) : (
+              <p>
+                The <strong>{product.name}</strong> is a high-quality industrial tool designed for precision
+                and durability. Built to meet the demands of professional workshops and manufacturing units,
+                this product offers reliable performance in demanding conditions.
+              </p>
+            )}
+            {Array.isArray(product.bundleItems) && product.bundleItems.length > 0 && (
+              <>
+                <h4>This Bundle Contains</h4>
+                <ul className="bundle-items-list">
+                  {product.bundleItems.map((item, i) => (
+                    <li key={i}>{item}</li>
+                  ))}
+                </ul>
+              </>
+            )}
             <h4>Specifications</h4>
             <table className="specs-table">
               <tbody>
