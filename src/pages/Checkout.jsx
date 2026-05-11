@@ -4,7 +4,7 @@ import { useCart } from '../context/CartContext';
 import { useCurrency } from '../context/CurrencyContext';
 import { api } from '../lib/api';
 import {
-  Trash2, CreditCard, Truck, CheckCircle, Banknote, Package,
+  Trash2, CreditCard, Truck, CheckCircle,
   Globe, AlertCircle, Lock, ShieldCheck, Copy,
 } from 'lucide-react';
 import './Checkout.css';
@@ -45,14 +45,13 @@ const PayGlocalButton = ({ pbId, prefill }) => {
 };
 
 const Checkout = () => {
-  const { cart, removeFromCart, updateQuantity, cartTotal, clearCart } = useCart();
+  const { cart, removeFromCart, updateQuantity, cartTotal } = useCart();
   const navigate = useNavigate();
   const { currency, format, convert, paygButtons, symbols } = useCurrency();
 
   const [step, setStep] = useState(1);
   const [isProcessing, setIsProcessing] = useState(false);
   const [error, setError] = useState('');
-  const [paymentMethod, setPaymentMethod] = useState('');
   const [createdOrder, setCreatedOrder] = useState(null);
   const [countries, setCountries] = useState([]);
 
@@ -69,8 +68,7 @@ const Checkout = () => {
       .catch(() => setCountries([]));
   }, []);
 
-  // INR is fulfilled with COD or PayGlocal-INR if configured. USD/EUR uses PayGlocal hosted button.
-  const isInternational = currency !== 'INR';
+  // All currencies (INR/USD/EUR) are fulfilled via PayGlocal hosted button.
   const totalDisplay = convert(cartTotal);
   const totalFormatted = format(cartTotal);
   const paygPbId =
@@ -78,9 +76,8 @@ const Checkout = () => {
     currency === 'EUR' ? paygButtons.eurPbId :
     currency === 'INR' ? paygButtons.inrPbId : '';
 
-  // Auto-pick a sensible default payment method when entering payment step.
-  // Derived as `effectiveMethod` so we don't trigger a cascading setState.
-  const effectiveMethod = paymentMethod || (isInternational ? 'payglocal' : 'cod');
+  // Only PayGlocal is supported now.
+  const effectiveMethod = 'payglocal';
 
   const handleCountryChange = (e) => {
     const code = e.target.value;
@@ -108,12 +105,6 @@ const Checkout = () => {
       };
       const { data } = await api.createOrder(payload);
       setCreatedOrder(data);
-      if (effectiveMethod === 'cod') {
-        // For COD we close out immediately and clear the cart.
-        clearCart();
-        navigate(`/order/${data.order.orderId}?status=cod`);
-        return;
-      }
       // For PayGlocal: keep cart until user actually pays. Move to payment step (3).
       setStep(3);
     } catch (err) {
@@ -216,43 +207,15 @@ const Checkout = () => {
                 <p className="text-secondary mb-6">Pay {totalFormatted} using your preferred method.</p>
 
                 <div className="payment-methods">
-                  {isInternational ? (
-                    <label className={`payment-option selected`}>
-                      <input type="radio" checked readOnly />
-                      <div className="payment-option-icon"><CreditCard size={22} /></div>
-                      <div className="payment-option-text">
-                        <strong>PayGlocal — International Card</strong>
-                        <span>Visa, Mastercard, Amex (in {currency})</span>
-                      </div>
-                    </label>
-                  ) : (
-                    <>
-                      <label className={`payment-option ${effectiveMethod === 'payglocal' ? 'selected' : ''}`}>
-                        <input type="radio" name="payment" value="payglocal" checked={effectiveMethod === 'payglocal'} onChange={() => setPaymentMethod('payglocal')} />
-                        <div className="payment-option-icon"><CreditCard size={22} /></div>
-                        <div className="payment-option-text">
-                          <strong>Online Payment</strong>
-                          <span>Card / UPI / Netbanking via PayGlocal</span>
-                        </div>
-                      </label>
-                      <label className={`payment-option ${effectiveMethod === 'cod' ? 'selected' : ''}`}>
-                        <input type="radio" name="payment" value="cod" checked={effectiveMethod === 'cod'} onChange={() => setPaymentMethod('cod')} />
-                        <div className="payment-option-icon"><Banknote size={22} /></div>
-                        <div className="payment-option-text">
-                          <strong>Cash on Delivery</strong>
-                          <span>Pay when you receive (India only)</span>
-                        </div>
-                      </label>
-                    </>
-                  )}
+                  <label className="payment-option selected">
+                    <input type="radio" checked readOnly />
+                    <div className="payment-option-icon"><CreditCard size={22} /></div>
+                    <div className="payment-option-text">
+                      <strong>Online Payment via PayGlocal</strong>
+                      <span>{currency === 'INR' ? 'Card / UPI / Netbanking' : `Visa, Mastercard, Amex (in ${currency})`}</span>
+                    </div>
+                  </label>
                 </div>
-
-                {effectiveMethod === 'cod' && (
-                  <div className="cod-notice animate-fade-in">
-                    <Package size={20} />
-                    <p>You will pay <strong>{totalFormatted}</strong> at the time of delivery. Please keep the exact amount ready.</p>
-                  </div>
-                )}
               </>
             )}
 
