@@ -269,6 +269,41 @@ const Checkout = () => {
     navigate(`/order/${encodeURIComponent(orderId)}?status=${finalStatus}`);
   };
 
+  // Belt-and-braces: poll our own backend every 3s while the customer is on
+  // step 3. Whichever signal lands first — frontend popup watcher, return
+  // URL, or webhook — flips order.paymentStatus, and this effect catches it
+  // and redirects. This is what saves us when PayGlocal's popup mounts in an
+  // iframe / shadow root that document.body.innerText can't see.
+  useEffect(() => {
+    if (step !== 3 || !createdOrder) return undefined;
+    const orderId = createdOrder.order.orderId;
+    let cancelled = false;
+    let timer;
+
+    const tick = async () => {
+      if (cancelled) return;
+      try {
+        const { data } = await api.getOrder(orderId);
+        if (cancelled) return;
+        const ps = data?.paymentStatus;
+        if (ps && ps !== 'pending') {
+          if (ps === 'success') clearCart();
+          navigate(`/order/${encodeURIComponent(orderId)}?status=${ps}`);
+          return;
+        }
+      } catch {
+        /* network blip — keep polling */
+      }
+      if (!cancelled) timer = setTimeout(tick, 3000);
+    };
+
+    timer = setTimeout(tick, 3000);
+    // Hard stop after 15 minutes so we don't poll forever if the customer
+    // wandered off mid-payment.
+    const stopAfter = setTimeout(() => { cancelled = true; clearTimeout(timer); }, 15 * 60 * 1000);
+    return () => { cancelled = true; clearTimeout(timer); clearTimeout(stopAfter); };
+  }, [step, createdOrder, clearCart, navigate]);
+
   if (cart.length === 0 && step !== 3) {
     return (
       <div className="section container text-center">
