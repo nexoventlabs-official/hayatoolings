@@ -15,21 +15,21 @@
   },
   {
     "id": 3,
-    "name": "10 × 12 Straight Pneumatic Connector",
+    "name": "10 × 12 Pneumatic Push-In Connectors — Pack of 50",
     "price": 41667,
     "image": "/products/11.png",
     "description": "Brass-bodied push-in straight connector for 10 mm OD tube to 12 mm thread. Rated for 0–10 bar at 60 °C, with a self-locking collet."
   },
   {
     "id": 4,
-    "name": "Carbide Drill 2-Flute — 10.2 × 43 × 89 mm",
+    "name": "Carbide 2-Flute Drills 10.2 mm — Pack of 3",
     "price": 83333,
     "image": "/products/12.png",
     "description": "Micro-grain solid-carbide twist drill, AlTiN-coated for high-speed dry drilling in alloy steel and stainless. Internal coolant channels keep chip evacuation clean."
   },
   {
     "id": 5,
-    "name": "10 mm Industrial Air Hose",
+    "name": "10 mm Industrial Air Hose — 50 m Coil",
     "price": 41667,
     "image": "/products/13.png",
     "description": "PU-lined fabric-reinforced 10 mm pneumatic hose. Flexible at low temperatures, abrasion-resistant outer jacket; sold by 10 m coil."
@@ -43,7 +43,7 @@
   },
   {
     "id": 7,
-    "name": "10 mm HSS Endmill (4-Flute)",
+    "name": "10 mm HSS Endmills (4-Flute) — Pack of 5",
     "price": 41667,
     "image": "/products/15.jpg",
     "description": "M2 HSS 4-flute square endmill, 10 mm diameter, TiN-coated. A reliable workhorse for slotting and profiling mild steel, aluminium and brass."
@@ -57,35 +57,35 @@
   },
   {
     "id": 9,
-    "name": "10-Metre Industrial Cable",
+    "name": "Multi-Core Industrial Cable — 100 m Roll",
     "price": 41667,
     "image": "/products/18.jpg",
     "description": "Flexible PVC-sheathed multi-core 10 m cable for control panels and CNC pendants. Oil and coolant resistant, EMI screened."
   },
   {
     "id": 10,
-    "name": "1-1/4\" Heavy-Duty Hex Nut",
+    "name": "1-1/4\" Heavy-Duty Hex Nuts — Box of 100",
     "price": 41667,
     "image": "/products/19.jpg",
     "description": "Grade-10 hardened hex nut, 1-1/4\" UNC. Zinc-plated finish suited for jig, fixture and chuck-stop applications."
   },
   {
     "id": 11,
-    "name": "1.1/8 × 12 UNF HSS-E Tap",
+    "name": "1.1/8 × 12 UNF HSS-E Taps — Pack of 3",
     "price": 83333,
     "image": "/products/2.png",
     "description": "HSS-E (5 % cobalt) hand tap, 1.1/8 × 12 UNF. Spiral-point geometry pushes chips forward — perfect for through-holes in steel."
   },
   {
     "id": 12,
-    "name": "1/2 × 12 BSW Spiral-Flute Tap",
+    "name": "1/2 × 12 BSW Spiral-Flute Taps — Pack of 5",
     "price": 41667,
     "image": "/products/20.jpg",
     "description": "HSS spiral-flute BSW tap, 1/2-12. Pulls chips up out of blind holes; suitable for stainless and tough alloy steels."
   },
   {
     "id": 13,
-    "name": "12\" / 300 mm Stainless Steel Scale",
+    "name": "12\" / 300 mm Stainless Steel Scales — Pack of 10",
     "price": 41667,
     "image": "/products/21.jpg",
     "description": "Hardened stainless 300 mm scale with dual imperial / metric etched graduations. Satin-chrome finish for glare-free reading."
@@ -134,7 +134,7 @@
   },
   {
     "id": 20,
-    "name": "165 mm Chuck T-Nut",
+    "name": "165 mm Chuck T-Nuts — Set of 4",
     "price": 41667,
     "image": "/products/9.png",
     "description": "Hardened T-nut for 165 mm 3-jaw and 4-jaw lathe chucks. Drop-in replacement that restores grip and concentricity."
@@ -155,28 +155,28 @@
   },
   {
     "id": 23,
-    "name": "1-Metre Nylon Rope",
+    "name": "Industrial Nylon Rope — 50 m Coil",
     "price": 41667,
     "image": "/products/11.png",
     "description": "Braided high-tensile nylon rope, 1 m length. UV-stabilised, oil resistant — ideal for tying down loads and counterweights."
   },
   {
     "id": 24,
-    "name": "4\" Cut-Off Wheel (Pack of 10)",
+    "name": "4\" Cut-Off Wheels — Pack of 50",
     "price": 41667,
     "image": "/products/12.png",
     "description": "Bonded aluminium-oxide 4\" cut-off wheels. Sold in packs of 10 — fits all standard angle grinders for cutting metal stock."
   },
   {
     "id": 25,
-    "name": "NSK 51308 Thrust Bearing (Japan)",
+    "name": "NSK 51308 Thrust Bearings — Pack of 2",
     "price": 83333,
     "image": "/products/13.png",
     "description": "Genuine NSK 51308 single-direction thrust ball bearing, 40 × 78 × 26 mm. Used in vertical lathe spindles and gearbox shafts."
   },
   {
     "id": 26,
-    "name": "SKF 6001 ZZ C3 Deep-Groove Bearing (India)",
+    "name": "SKF 6001 ZZ C3 Deep-Groove Bearings — Pack of 5",
     "price": 41667,
     "image": "/products/14.png",
     "description": "SKF 6001 ZZ C3 sealed deep-groove ball bearing, 12 × 28 × 8 mm. C3 clearance for high-speed motor spindles."
@@ -201,8 +201,8 @@
     "description": "Everything you need to bring a new milling spindle online: a precision 10 mm keyless chuck, an HSS 4-flute endmill and a matching pneumatic connector for the coolant line.",
     "bundleItems": [
       "10 mm Precision Drill Chuck",
-      "10 mm HSS Endmill (4-Flute)",
-      "10 × 12 Straight Pneumatic Connector"
+      "10 mm HSS Endmills (4-Flute) — Pack of 5",
+      "10 × 12 Pneumatic Push-In Connectors — Pack of 50"
     ]
   },
   {
@@ -212,7 +212,7 @@
     "image": "/products/21.jpg",
     "description": "An inspection-bench essentials kit. A 300 mm stainless scale for layout, a calibrated 1/4\" BSW plug gauge for thread verification and a fresh threading insert for re-cutting if you fail the gauge.",
     "bundleItems": [
-      "12\" / 300 mm Stainless Steel Scale",
+      "12\" / 300 mm Stainless Steel Scales — Pack of 10",
       "1/4\" BSW Thread Plug Gauge (Go / No-Go)",
       "16ER 1.5 ISO Threading Insert (10 pcs)"
     ]
@@ -224,9 +224,9 @@
     "image": "/products/12.png",
     "description": "Heavy-duty carbide trio for tough cutting jobs: a 10.2 mm carbide drill, an H-TECH insert cutter holder and a TiN-coated HSS endmill. Built for stainless and tool-steel production work.",
     "bundleItems": [
-      "Carbide Drill 2-Flute — 10.2 × 43 × 89 mm",
+      "Carbide 2-Flute Drills 10.2 mm — Pack of 3",
       "10 mm H-TECH Insert Cutter Tool Holder",
-      "10 mm HSS Endmill (4-Flute)"
+      "10 mm HSS Endmills (4-Flute) — Pack of 5"
     ]
   },
   {
@@ -236,7 +236,7 @@
     "image": "/products/16.jpg",
     "description": "A balanced milling starter set covering shoulder milling, face milling and drilling — endmill, indexable cutter holder and matching keyless drill chuck.",
     "bundleItems": [
-      "10 mm HSS Endmill (4-Flute)",
+      "10 mm HSS Endmills (4-Flute) — Pack of 5",
       "10 mm H-TECH Insert Cutter Tool Holder",
       "10 mm Precision Drill Chuck"
     ]
@@ -248,9 +248,9 @@
     "image": "/products/13.png",
     "description": "Replenish the consumables drawer in one click: 10 m of pneumatic hose, a 10 m flexible control cable and 1 m of braided nylon rope.",
     "bundleItems": [
-      "10 mm Industrial Air Hose",
-      "10-Metre Industrial Cable",
-      "1-Metre Nylon Rope"
+      "10 mm Industrial Air Hose — 50 m Coil",
+      "Multi-Core Industrial Cable — 100 m Roll",
+      "Industrial Nylon Rope — 50 m Coil"
     ]
   },
   {
@@ -260,9 +260,9 @@
     "image": "/products/9.png",
     "description": "Spindle-rebuild bundle: a genuine NSK thrust bearing, an SKF deep-groove ball bearing and a 165 mm chuck T-nut to refit the chuck after the rebuild.",
     "bundleItems": [
-      "NSK 51308 Thrust Bearing (Japan)",
-      "SKF 6001 ZZ C3 Deep-Groove Bearing (India)",
-      "165 mm Chuck T-Nut"
+      "NSK 51308 Thrust Bearings — Pack of 2",
+      "SKF 6001 ZZ C3 Deep-Groove Bearings — Pack of 5",
+      "165 mm Chuck T-Nuts — Set of 4"
     ]
   },
   {
@@ -286,7 +286,7 @@
     "bundleItems": [
       "0.5 HP Precision Grinding Machine",
       "10 mm Precision Drill Chuck",
-      "1/2 × 12 BSW Spiral-Flute Tap"
+      "1/2 × 12 BSW Spiral-Flute Taps — Pack of 5"
     ]
   },
   {
@@ -296,14 +296,14 @@
     "image": "/products/2.png",
     "description": "Threading from start to finish: a UNF HSS-E hand tap for cut threads, an ISO threading insert for production threading on the lathe and the matching threading bar.",
     "bundleItems": [
-      "1.1/8 × 12 UNF HSS-E Tap",
+      "1.1/8 × 12 UNF HSS-E Taps — Pack of 3",
       "16ER 1.5 ISO Threading Insert (10 pcs)",
       "1/2\" Right-Hand Threading Bar"
     ]
   },
   {
     "id": 37,
-    "name": "12 mm HSS 2-Flute Twin Endmill",
+    "name": "12 mm HSS 2-Flute Endmills — Pack of 5",
     "price": 41667,
     "image": "/products/15.jpg",
     "description": "12 mm HSS 2-flute endmill with extended flute length for deep slotting in aluminium and free-cutting steels."
@@ -350,8 +350,8 @@
     "image": "/products/12.png",
     "description": "A drill-and-mill pair for one-setup work — a carbide drill to open the hole and a matching HSS endmill to enlarge or profile it.",
     "bundleItems": [
-      "Carbide Drill 2-Flute — 10.2 × 43 × 89 mm",
-      "10 mm HSS Endmill (4-Flute)"
+      "Carbide 2-Flute Drills 10.2 mm — Pack of 3",
+      "10 mm HSS Endmills (4-Flute) — Pack of 5"
     ]
   },
   {
@@ -361,7 +361,7 @@
     "image": "/products/2.png",
     "description": "Cover hand tapping and CNC threading in one purchase — a UNF HSS-E hand tap for fixturing work plus an ISO threading insert for production runs.",
     "bundleItems": [
-      "1.1/8 × 12 UNF HSS-E Tap",
+      "1.1/8 × 12 UNF HSS-E Taps — Pack of 3",
       "16ER 1.5 ISO Threading Insert (10 pcs)"
     ]
   },

@@ -1,15 +1,47 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { useCart } from '../context/CartContext';
 import { useCurrency } from '../context/CurrencyContext';
 import { api } from '../lib/api';
 import {
   Trash2, CreditCard, Truck, CheckCircle,
-  Globe, AlertCircle, Lock, ShieldCheck, Copy,
+  Globe, AlertCircle, Lock, ShieldCheck, Copy, MapPin, Phone, Mail, User,
 } from 'lucide-react';
+import { getCountryMeta, stripDial } from '../data/countryMeta';
 import './Checkout.css';
 
 const PAYGLOCAL_SCRIPT = 'https://oneclick.payglocal.in/simple.js';
+const SHIPPING_STORAGE_KEY = 'haya:shipping:v1';
+
+// Read previously-saved shipping details from localStorage. Returns the
+// canonical empty form on first visit, parse failure, or when localStorage
+// isn't available. Whitelists fields so a corrupted blob can't inject keys.
+const SHIPPING_FIELDS = [
+  'firstName', 'lastName', 'email', 'phone',
+  'addressLine1', 'addressLine2', 'city', 'state',
+  'postalCode', 'countryCode', 'country', 'notes',
+];
+const EMPTY_SHIPPING = {
+  firstName: '', lastName: '', email: '', phone: '',
+  addressLine1: '', addressLine2: '', city: '', state: '',
+  postalCode: '', countryCode: 'IN', country: 'India', notes: '',
+};
+const readStoredShipping = () => {
+  if (typeof window === 'undefined' || !window.localStorage) return EMPTY_SHIPPING;
+  try {
+    const raw = window.localStorage.getItem(SHIPPING_STORAGE_KEY);
+    if (!raw) return EMPTY_SHIPPING;
+    const parsed = JSON.parse(raw);
+    if (!parsed || typeof parsed !== 'object') return EMPTY_SHIPPING;
+    const out = { ...EMPTY_SHIPPING };
+    SHIPPING_FIELDS.forEach((k) => {
+      if (typeof parsed[k] === 'string') out[k] = parsed[k];
+    });
+    return out;
+  } catch {
+    return EMPTY_SHIPPING;
+  }
+};
 
 // --- PayGlocal popup prefill -- INTENTIONALLY DISABLED ------------------
 //
@@ -174,11 +206,18 @@ const Checkout = () => {
   const [createdOrder, setCreatedOrder] = useState(null);
   const [countries, setCountries] = useState([]);
 
-  const [shipping, setShipping] = useState({
-    firstName: '', lastName: '', email: '', phone: '',
-    addressLine1: '', addressLine2: '', city: '', state: '',
-    postalCode: '', countryCode: 'IN', country: 'India', notes: '',
-  });
+  // Lazy initial state -> reads localStorage exactly once on mount so a
+  // returning customer doesn't have to retype their address.
+  const [shipping, setShipping] = useState(readStoredShipping);
+
+  // Persist shipping -> localStorage on every change. Wrapped in try/catch
+  // because Safari Private Mode and some embedded browsers throw on write.
+  useEffect(() => {
+    if (typeof window === 'undefined' || !window.localStorage) return;
+    try {
+      window.localStorage.setItem(SHIPPING_STORAGE_KEY, JSON.stringify(shipping));
+    } catch { /* quota or storage disabled — ignore */ }
+  }, [shipping]);
 
   // Load country list once.
   useEffect(() => {
@@ -198,13 +237,69 @@ const Checkout = () => {
   // Only PayGlocal is supported now.
   const effectiveMethod = 'payglocal';
 
+  // Per-country form metadata: dial code, postal regex, state list, labels.
+  const meta = useMemo(() => getCountryMeta(shipping.countryCode), [shipping.countryCode]);
+
+  // Inline postal-code validation. Only flags an error when the user has
+  // actually typed something AND the country has a configured pattern that
+  // the value fails. Avoids nagging on an empty field.
+  const postalError = useMemo(() => {
+    if (!shipping.postalCode) return '';
+    if (!meta.postalPattern) return '';
+    return meta.postalPattern.test(shipping.postalCode)
+      ? ''
+      : `Doesn't look like a valid ${meta.postalLabel}${meta.postalExample ? ` (e.g. ${meta.postalExample})` : ''}`;
+  }, [shipping.postalCode, meta]);
+
+  // Country switcher: keep both code & name in sync, swap the phone's dial
+  // prefix to the new country's code, and clear postal + state since they're
+  // country-specific. Uses the meta map first, falls back to the backend's
+  // /api/meta/countries list (for the long tail of countries we haven't
+  // mapped in countryMeta.js yet).
   const handleCountryChange = (e) => {
     const code = e.target.value;
-    const c = countries.find((x) => x.code === code);
-    setShipping((s) => ({ ...s, countryCode: code, country: c ? c.name : '' }));
+    const fromList = countries.find((x) => x.code === code);
+    const m = getCountryMeta(code);
+    const newDial = m.dial || fromList?.dial || '';
+    setShipping((s) => {
+      const oldMeta = getCountryMeta(s.countryCode);
+      const localPhone = stripDial(s.phone, oldMeta.dial);
+      return {
+        ...s,
+        countryCode: code,
+        country: fromList ? fromList.name : s.country,
+        // Reset state + postalCode because both are country-specific and a
+        // stale TX zip in a UK form will fail the validator anyway.
+        state: '',
+        postalCode: '',
+        // Preserve whatever local digits the user already typed; just swap
+        // the dial code prefix to the newly-chosen country.
+        phone: localPhone ? `${newDial} ${localPhone}`.trim() : newDial,
+      };
+    });
   };
 
   const handleField = (k) => (e) => setShipping((s) => ({ ...s, [k]: e.target.value }));
+
+  // Phone field wraps handleField('phone') but auto-prepends the country's
+  // dial code if the user clears it or types only the local number.
+  const handlePhoneChange = (e) => {
+    const raw = e.target.value;
+    const dial = meta.dial;
+    if (!dial) { setShipping((s) => ({ ...s, phone: raw })); return; }
+    // If the user has already typed the dial (with or without space), keep
+    // their text exactly. Otherwise prefix it.
+    const trimmed = raw.trim();
+    if (trimmed === '' || trimmed === dial) {
+      setShipping((s) => ({ ...s, phone: dial }));
+      return;
+    }
+    if (trimmed.startsWith(dial) || trimmed.startsWith('+')) {
+      setShipping((s) => ({ ...s, phone: raw }));
+      return;
+    }
+    setShipping((s) => ({ ...s, phone: `${dial} ${trimmed}` }));
+  };
 
   // Creates the order on the server when the user clicks "Continue to Pay".
   // The admin panel will see this row immediately as `pending`, and its
@@ -240,6 +335,13 @@ const Checkout = () => {
   const handleNext = (e) => {
     e.preventDefault();
     if (step === 1) {
+      // Bounce back if the country-specific postal code regex doesn't match.
+      // Also surface the message at the top of the form so the user notices.
+      if (postalError) {
+        setError(postalError);
+        return;
+      }
+      setError('');
       setStep(2);
       return;
     }
@@ -342,39 +444,136 @@ const Checkout = () => {
 
             {step === 1 && (
               <>
-                <h3 className="h3 mb-6">Shipping Details <span className="text-secondary" style={{ fontSize: '0.8rem' }}>(Global)</span></h3>
-                <form id="checkout-form" onSubmit={handleNext}>
-                  <div className="grid grid-cols-2 gap-4">
-                    <div className="input-group"><label className="input-label">First Name</label><input required className="input-field" value={shipping.firstName} onChange={handleField('firstName')} /></div>
-                    <div className="input-group"><label className="input-label">Last Name</label><input required className="input-field" value={shipping.lastName} onChange={handleField('lastName')} /></div>
-                  </div>
-                  <div className="grid grid-cols-2 gap-4">
-                    <div className="input-group"><label className="input-label">Email</label><input type="email" required className="input-field" value={shipping.email} onChange={handleField('email')} /></div>
-                    <div className="input-group"><label className="input-label">Phone Number</label><input type="tel" required className="input-field" placeholder="+91 ..." value={shipping.phone} onChange={handleField('phone')} /></div>
+                <h3 className="h3 mb-2">Shipping Details</h3>
+                <p className="text-secondary mb-6" style={{ fontSize: '0.85rem' }}>
+                  We deliver worldwide — pick your country first and the form below will adjust to your address format.
+                </p>
+
+                <form id="checkout-form" onSubmit={handleNext} noValidate>
+                  {/* --- Step 1.0: Country selector (always first) --- */}
+                  <div className="ship-section">
+                    <label className="ship-section-title">
+                      <Globe size={15} /> Shipping to
+                    </label>
+                    <select
+                      required
+                      className="input-field ship-country-select"
+                      value={shipping.countryCode}
+                      onChange={handleCountryChange}
+                      aria-label="Shipping country"
+                    >
+                      {countries.length === 0 && <option value="IN">India (+91)</option>}
+                      {countries.map((c) => (
+                        <option key={c.code} value={c.code}>{c.name} ({c.dial})</option>
+                      ))}
+                    </select>
                   </div>
 
-                  <div className="input-group"><label className="input-label">Address Line 1</label><input required className="input-field" value={shipping.addressLine1} onChange={handleField('addressLine1')} /></div>
-                  <div className="input-group"><label className="input-label">Address Line 2 <span className="text-secondary">(optional)</span></label><input className="input-field" value={shipping.addressLine2} onChange={handleField('addressLine2')} /></div>
-
-                  <div className="grid grid-cols-2 gap-4">
-                    <div className="input-group"><label className="input-label">City</label><input required className="input-field" value={shipping.city} onChange={handleField('city')} /></div>
-                    <div className="input-group"><label className="input-label">State / Province</label><input required className="input-field" value={shipping.state} onChange={handleField('state')} /></div>
-                  </div>
-
-                  <div className="grid grid-cols-2 gap-4">
-                    <div className="input-group">
-                      <label className="input-label"><Globe size={14} style={{ verticalAlign: '-2px', marginRight: 4 }} />Country</label>
-                      <select required className="input-field" value={shipping.countryCode} onChange={handleCountryChange}>
-                        {countries.length === 0 && <option value="IN">India</option>}
-                        {countries.map((c) => (
-                          <option key={c.code} value={c.code}>{c.name} ({c.dial})</option>
-                        ))}
-                      </select>
+                  {/* --- Step 1.1: Personal info --- */}
+                  <div className="ship-section">
+                    <div className="ship-section-title"><User size={15} /> Personal information</div>
+                    <div className="grid grid-cols-2 gap-4">
+                      <div className="input-group">
+                        <label className="input-label">First Name</label>
+                        <input required className="input-field" value={shipping.firstName} onChange={handleField('firstName')} />
+                      </div>
+                      <div className="input-group">
+                        <label className="input-label">Last Name</label>
+                        <input required className="input-field" value={shipping.lastName} onChange={handleField('lastName')} />
+                      </div>
                     </div>
-                    <div className="input-group"><label className="input-label">Postal / ZIP Code</label><input required className="input-field" value={shipping.postalCode} onChange={handleField('postalCode')} /></div>
+                    <div className="grid grid-cols-2 gap-4">
+                      <div className="input-group">
+                        <label className="input-label"><Mail size={12} style={{ verticalAlign: '-1px', marginRight: 4 }} />Email</label>
+                        <input
+                          type="email"
+                          required
+                          className="input-field"
+                          autoComplete="email"
+                          value={shipping.email}
+                          onChange={handleField('email')}
+                        />
+                      </div>
+                      <div className="input-group">
+                        <label className="input-label"><Phone size={12} style={{ verticalAlign: '-1px', marginRight: 4 }} />Phone Number</label>
+                        <div className="phone-input-wrap">
+                          {meta.dial && <span className="phone-dial-badge">{meta.dial}</span>}
+                          <input
+                            type="tel"
+                            required
+                            className="input-field phone-input"
+                            autoComplete="tel"
+                            placeholder={meta.dial ? `${meta.dial} 98765 43210` : 'Phone with country code'}
+                            value={shipping.phone}
+                            onChange={handlePhoneChange}
+                            onFocus={(e) => {
+                              // Helpful nudge: if the field is still just the
+                              // dial code, drop the cursor at the end so the
+                              // user can start typing the local number.
+                              if (e.target.value.trim() === meta.dial) {
+                                const len = e.target.value.length;
+                                requestAnimationFrame(() => e.target.setSelectionRange(len, len));
+                              }
+                            }}
+                          />
+                        </div>
+                      </div>
+                    </div>
                   </div>
 
-                  <div className="input-group"><label className="input-label">Order Notes <span className="text-secondary">(optional)</span></label><textarea className="input-field" rows={2} value={shipping.notes} onChange={handleField('notes')} /></div>
+                  {/* --- Step 1.2: Address --- */}
+                  <div className="ship-section">
+                    <div className="ship-section-title"><MapPin size={15} /> Delivery address</div>
+                    <div className="input-group">
+                      <label className="input-label">Address Line 1</label>
+                      <input required className="input-field" autoComplete="address-line1" value={shipping.addressLine1} onChange={handleField('addressLine1')} />
+                    </div>
+                    <div className="input-group">
+                      <label className="input-label">Address Line 2 <span className="text-secondary">(optional)</span></label>
+                      <input className="input-field" autoComplete="address-line2" value={shipping.addressLine2} onChange={handleField('addressLine2')} />
+                    </div>
+                    <div className="grid grid-cols-2 gap-4">
+                      <div className="input-group">
+                        <label className="input-label">City</label>
+                        <input required className="input-field" autoComplete="address-level2" value={shipping.city} onChange={handleField('city')} />
+                      </div>
+                      <div className="input-group">
+                        <label className="input-label">{meta.stateLabel}</label>
+                        {meta.states ? (
+                          <select required className="input-field" value={shipping.state} onChange={handleField('state')}>
+                            <option value="" disabled>Select {meta.stateLabel.toLowerCase()}</option>
+                            {meta.states.map((s) => (
+                              <option key={s} value={s}>{s}</option>
+                            ))}
+                          </select>
+                        ) : (
+                          <input required className="input-field" autoComplete="address-level1" value={shipping.state} onChange={handleField('state')} />
+                        )}
+                      </div>
+                    </div>
+                    <div className="input-group">
+                      <label className="input-label">{meta.postalLabel}</label>
+                      <input
+                        required
+                        className={`input-field ${postalError ? 'input-error' : ''}`}
+                        autoComplete="postal-code"
+                        placeholder={meta.postalPlaceholder}
+                        value={shipping.postalCode}
+                        onChange={handleField('postalCode')}
+                      />
+                      {postalError && (
+                        <span className="input-helper-error">
+                          <AlertCircle size={12} /> {postalError}
+                        </span>
+                      )}
+                    </div>
+                  </div>
+
+                  {/* --- Step 1.3: Notes (optional) --- */}
+                  <div className="input-group">
+                    <label className="input-label">Order Notes <span className="text-secondary">(optional)</span></label>
+                    <textarea className="input-field" rows={2} value={shipping.notes} onChange={handleField('notes')} />
+                  </div>
                 </form>
               </>
             )}

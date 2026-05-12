@@ -1,6 +1,9 @@
-import React, { useMemo } from 'react';
-import { useParams, Link } from 'react-router-dom';
-import { ShoppingCart, Minus, Plus, Truck, Shield, RotateCcw, ChevronRight, Package } from 'lucide-react';
+import React, { useEffect, useMemo, useState } from 'react';
+import { useParams, Link, useNavigate } from 'react-router-dom';
+import {
+  ShoppingCart, Minus, Plus, Truck, Shield, RotateCcw,
+  ChevronRight, Package, ChevronLeft,
+} from 'lucide-react';
 import { useCart } from '../context/CartContext';
 import { useCurrency } from '../context/CurrencyContext';
 import ProductCard from '../components/ProductCard';
@@ -27,6 +30,7 @@ const categorizeProduct = (name) => {
 
 const ProductDetail = () => {
   const { id } = useParams();
+  const navigate = useNavigate();
   const { addToCart, cart, updateQuantity } = useCart();
   const { format } = useCurrency();
 
@@ -43,6 +47,59 @@ const ProductDetail = () => {
       .filter(p => p.id !== product.id && categorizeProduct(p.name) === category)
       .slice(0, 4);
   }, [product, category]);
+
+  // Build the carousel slide list. For bundle products we look up each
+  // bundleItems entry against the catalog (by name) and use that product's
+  // image, so the customer literally sees the items they're buying. For
+  // singletons we just show the single product image — no rotation needed.
+  const carouselSlides = useMemo(() => {
+    if (!product) return [];
+    const cover = { image: product.image, label: product.name };
+    if (!Array.isArray(product.bundleItems) || product.bundleItems.length === 0) {
+      return [cover];
+    }
+    const matched = product.bundleItems.map((itemName) => {
+      const hit = productsData.find((p) => p.name === itemName);
+      return {
+        image: hit?.image || product.image,
+        label: itemName,
+      };
+    });
+    // First slide is the cover so the customer sees the headline image, then
+    // the carousel reveals what's inside.
+    return [cover, ...matched];
+  }, [product]);
+
+  const [slideIndex, setSlideIndex] = useState(0);
+  // React 18 pattern: reset state-derived-from-props *during render* by
+  // comparing the previous prop value, instead of using an effect with
+  // setState. Avoids the cascading-render lint and runs one render earlier.
+  const [prevProductId, setPrevProductId] = useState(product?.id);
+  if (product?.id !== prevProductId) {
+    setPrevProductId(product?.id);
+    setSlideIndex(0);
+  }
+
+  // Auto-advance every 3s when the bundle has multiple slides. Pause on tab
+  // hidden so we don't waste cycles on background tabs.
+  useEffect(() => {
+    if (carouselSlides.length <= 1) return undefined;
+    const tick = () => setSlideIndex((i) => (i + 1) % carouselSlides.length);
+    const timer = setInterval(tick, 3000);
+    return () => clearInterval(timer);
+  }, [carouselSlides.length]);
+
+  const goPrev = () => setSlideIndex((i) => (i - 1 + carouselSlides.length) % carouselSlides.length);
+  const goNext = () => setSlideIndex((i) => (i + 1) % carouselSlides.length);
+
+  // Buy Now: ensure the product is in the cart, then send the user straight
+  // to /checkout — they no longer have to first "Add to Cart" and then click
+  // Cart → Checkout.
+  const handleBuyNow = () => {
+    if (!product) return;
+    if (!cartItem) addToCart(product);
+    navigate('/checkout');
+  };
 
   if (!product) {
     return (
@@ -74,17 +131,60 @@ const ProductDetail = () => {
       <div className="container">
         {/* Product Main Section */}
         <div className="detail-main">
-          {/* Product Image */}
+          {/* Product Image / Bundle Carousel */}
           <div className="detail-image-section">
-            <div className="detail-image-wrapper">
-              {product.image ? (
-                <img src={product.image} alt={product.name} className="detail-image" />
+            <div className="detail-image-wrapper detail-carousel">
+              {carouselSlides[slideIndex]?.image ? (
+                <img
+                  key={slideIndex}
+                  src={carouselSlides[slideIndex].image}
+                  alt={carouselSlides[slideIndex].label}
+                  className="detail-image carousel-fade"
+                />
               ) : (
                 <div className="detail-image-placeholder">
                   <div className="abstract-shape shape-1"></div>
                   <div className="abstract-shape shape-2"></div>
                   <span className="placeholder-text">Image Pending</span>
                 </div>
+              )}
+
+              {carouselSlides.length > 1 && (
+                <>
+                  <button
+                    type="button"
+                    className="carousel-nav carousel-nav-prev"
+                    onClick={goPrev}
+                    aria-label="Previous image"
+                  >
+                    <ChevronLeft size={20} />
+                  </button>
+                  <button
+                    type="button"
+                    className="carousel-nav carousel-nav-next"
+                    onClick={goNext}
+                    aria-label="Next image"
+                  >
+                    <ChevronRight size={20} />
+                  </button>
+                  <div className="carousel-caption">
+                    {slideIndex === 0 ? 'Bundle cover' : `${slideIndex} of ${carouselSlides.length - 1}`}
+                    {slideIndex > 0 && (
+                      <span className="carousel-caption-name"> — {carouselSlides[slideIndex].label}</span>
+                    )}
+                  </div>
+                  <div className="carousel-dots">
+                    {carouselSlides.map((_, i) => (
+                      <button
+                        type="button"
+                        key={i}
+                        className={`carousel-dot ${i === slideIndex ? 'active' : ''}`}
+                        onClick={() => setSlideIndex(i)}
+                        aria-label={`Go to slide ${i + 1}`}
+                      />
+                    ))}
+                  </div>
+                </>
               )}
             </div>
           </div>
@@ -157,9 +257,13 @@ const ProductDetail = () => {
                   Add to Cart
                 </button>
               )}
-              <Link to="/checkout" className="btn btn-outline detail-buy-btn">
+              <button
+                type="button"
+                className="btn btn-outline detail-buy-btn"
+                onClick={handleBuyNow}
+              >
                 Buy Now
-              </Link>
+              </button>
             </div>
 
             {/* Delivery Features */}

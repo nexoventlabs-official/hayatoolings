@@ -1,11 +1,40 @@
-import React, { createContext, useContext, useState } from 'react';
+import React, { createContext, useContext, useEffect, useState } from 'react';
 
 const CartContext = createContext();
 
 export const useCart = () => useContext(CartContext);
 
+const CART_STORAGE_KEY = 'haya:cart:v1';
+
+// Read cart from localStorage. Returns [] on first visit, parse failure, or
+// when running where window/localStorage is unavailable (e.g. during SSR).
+const readStoredCart = () => {
+  if (typeof window === 'undefined' || !window.localStorage) return [];
+  try {
+    const raw = window.localStorage.getItem(CART_STORAGE_KEY);
+    if (!raw) return [];
+    const parsed = JSON.parse(raw);
+    if (!Array.isArray(parsed)) return [];
+    // Sanity-check shape so a corrupted entry can't crash the app on boot.
+    return parsed.filter((it) => it && typeof it === 'object' && it.id != null && it.quantity > 0);
+  } catch {
+    return [];
+  }
+};
+
 export const CartProvider = ({ children }) => {
-  const [cart, setCart] = useState([]);
+  // Lazy initial state -> reads localStorage exactly once on mount.
+  const [cart, setCart] = useState(readStoredCart);
+
+  // Mirror cart -> localStorage on every change so it survives reloads.
+  useEffect(() => {
+    if (typeof window === 'undefined' || !window.localStorage) return;
+    try {
+      window.localStorage.setItem(CART_STORAGE_KEY, JSON.stringify(cart));
+    } catch {
+      /* quota exceeded or storage disabled — best-effort, ignore */
+    }
+  }, [cart]);
 
   const addToCart = (product) => {
     setCart((prev) => {
