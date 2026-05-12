@@ -59,7 +59,7 @@ const ProductDetail = () => {
       return [cover];
     }
     const matched = product.bundleItems.map((itemName) => {
-      const hit = productsData.find((p) => p.name === itemName);
+      const hit = productsData.find((p) => p.name === itemName || p.name.includes(itemName) || itemName.includes(p.name));
       return {
         image: hit?.image || product.image,
         label: itemName,

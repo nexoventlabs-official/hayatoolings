@@ -1,22 +1,48 @@
-import React from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { ShoppingCart } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { useCart } from '../context/CartContext';
 import { useCurrency } from '../context/CurrencyContext';
+import productsData from '../data/products.json';
 import './ProductCard.css';
 
 const ProductCard = ({ product, hideAddButton }) => {
   const { addToCart } = useCart();
   const { format } = useCurrency();
+  const [slideIndex, setSlideIndex] = useState(0);
+
+  const carouselSlides = useMemo(() => {
+    if (!product) return [];
+    const cover = { image: product.image };
+    if (!Array.isArray(product.bundleItems) || product.bundleItems.length === 0) {
+      return [cover];
+    }
+    const matched = product.bundleItems.map((itemName) => {
+      // Find the item exactly, or if it has been renamed, find a partial match
+      const hit = productsData.find((p) => p.name === itemName || p.name.includes(itemName) || itemName.includes(p.name));
+      return {
+        image: hit?.image || product.image,
+      };
+    });
+    return [cover, ...matched];
+  }, [product]);
+
+  useEffect(() => {
+    if (carouselSlides.length <= 1) return undefined;
+    const tick = () => setSlideIndex((i) => (i + 1) % carouselSlides.length);
+    const timer = setInterval(tick, 3000);
+    return () => clearInterval(timer);
+  }, [carouselSlides.length]);
 
   const formattedPrice = format(product.price);
+  const currentImage = carouselSlides[slideIndex]?.image || product.image;
 
   return (
     <div className="product-card glass animate-fade-in">
       <Link to={`/product/${product.id}`} className="product-card-link">
         <div className="product-image-wrapper">
-          {product.image ? (
-            <img src={product.image} alt={product.name} className="product-image" loading="lazy" />
+          {currentImage ? (
+            <img src={currentImage} alt={product.name} className="product-image" loading="lazy" />
           ) : (
             <div className="product-image-placeholder">
               <div className="abstract-shape shape-1"></div>
