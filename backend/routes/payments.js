@@ -6,27 +6,65 @@ const { verifyToken, mapStatus, verifyRsaSignature } = require('../utils/paygloc
 
 const router = express.Router();
 
+// Compare a gateway-reported amount/currency against the order. Returns a
+// human-readable mismatch reason, or null when the values agree (or when the
+// gateway didn't tell us an amount, in which case we trust the status).
+function checkAmountMatch(order, paidAmount, paidCurrency) {
+  if (paidAmount == null || paidAmount === '') return null; // nothing to compare
+  const paid = Number(paidAmount);
+  if (!Number.isFinite(paid)) return `invalid_amount:${paidAmount}`;
+
+  const expected = Number(order.totalDisplay);
+  // Allow a 1-unit (or 1%) rounding tolerance — some gateways round half-up.
+  const tolerance = Math.max(1, expected * 0.01);
+  if (Math.abs(paid - expected) > tolerance) {
+    return `amount_mismatch:paid=${paid} expected=${expected} ${order.currency}`;
+  }
+  if (paidCurrency && String(paidCurrency).toUpperCase() !== order.currency) {
+    return `currency_mismatch:paid=${paidCurrency} expected=${order.currency}`;
+  }
+  return null;
+}
+
 // Apply a status update to both the Transaction and the Order in one place.
-async function applyStatus({ orderId, status, gatewayRef, failureReason, source, raw }) {
+//
+// Defense-in-depth: if the gateway reports `success` but the amount/currency
+// disagrees with what the order was created for, we OVERRIDE the status to
+// `failed` and record the mismatch as the failure reason. This prevents the
+// classic "₹1,25,000 cart marked paid for ₹1" attack.
+async function applyStatus({ orderId, status, gatewayRef, failureReason, amount, currency, source, raw }) {
   if (!orderId) return null;
+  const order = await Order.findOne({ orderId });
+  if (!order) return null;
+
+  let finalStatus = status;
+  let finalReason = failureReason;
+  if (finalStatus === 'success') {
+    const mismatch = checkAmountMatch(order, amount, currency);
+    if (mismatch) {
+      console.warn(`[payglocal] order ${orderId} success rejected: ${mismatch}`);
+      finalStatus = 'failed';
+      finalReason = mismatch;
+    }
+  }
+
   const txn = await Transaction.findOneAndUpdate(
     { orderId },
     {
-      status,
+      status: finalStatus,
       ...(gatewayRef ? { gatewayRef } : {}),
-      ...(failureReason ? { failureReason } : {}),
+      ...(finalReason ? { failureReason: finalReason } : {}),
       rawResponse: { source, body: raw },
     },
     { new: true, sort: { createdAt: -1 } }
   );
-  const order = await Order.findOne({ orderId });
-  if (order) {
-    order.paymentStatus = status;
-    if (status === 'success') order.orderStatus = 'confirmed';
-    if (gatewayRef) order.transactionRef = gatewayRef;
-    await order.save();
-  }
-  return { txn, order };
+
+  order.paymentStatus = finalStatus;
+  if (finalStatus === 'success') order.orderStatus = 'confirmed';
+  if (gatewayRef) order.transactionRef = gatewayRef;
+  await order.save();
+
+  return { txn, order, mismatch: finalStatus !== status ? finalReason : null };
 }
 
 /**
@@ -78,8 +116,10 @@ router.post('/payglocal/return', async (req, res) => {
     const status = mapStatus(payload.status || body.status);
     const gatewayRef = payload.gid || payload.transactionId || body.gatewayRef;
     const failureReason = payload.failureReason || payload.errorMessage;
+    const amount = payload.amount ?? body.amount ?? (body.data && body.data.amount);
+    const currency = payload.currency ?? body.currency ?? (body.data && body.data.currency);
 
-    const result = await applyStatus({ orderId, status, gatewayRef, failureReason, source: 'return_url', raw: body });
+    const result = await applyStatus({ orderId, status, gatewayRef, failureReason, amount, currency, source: 'return_url', raw: body });
     if (!result) return res.status(404).json({ error: 'Order not found' });
     res.json({ data: { order: result.order, transaction: result.txn } });
   } catch (err) {
@@ -109,9 +149,11 @@ router.get('/payglocal/return', async (req, res) => {
     const orderId = payload.orderId || payload.merchantOrderId || payload.merchantTransactionId;
     const status = mapStatus(payload.status);
     const gatewayRef = payload.gid || payload.transactionId;
+    const amount = payload.amount;
+    const currency = payload.currency;
 
     if (orderId) {
-      await applyStatus({ orderId, status, gatewayRef, source: 'return_url_get', raw: q });
+      await applyStatus({ orderId, status, gatewayRef, amount, currency, source: 'return_url_get', raw: q });
     }
 
     const front = (process.env.FRONTEND_URL || 'http://localhost:5173').replace(/\/$/, '');
@@ -170,9 +212,11 @@ router.post('/payglocal/webhook', async (req, res) => {
     const gatewayRef = payload.gid || payload.transactionId ||
       (payload.data && (payload.data.gid || payload.data.transactionId));
     const status = mapStatus(payload.status || (payload.data && payload.data.status));
+    const amount = payload.amount ?? (payload.data && payload.data.amount);
+    const currency = payload.currency ?? (payload.data && payload.data.currency);
 
     if (orderId) {
-      await applyStatus({ orderId, status, gatewayRef, source: 'webhook', raw: body });
+      await applyStatus({ orderId, status, gatewayRef, amount, currency, source: 'webhook', raw: body });
     } else {
       console.warn('[payglocal] webhook received without orderId', body);
     }

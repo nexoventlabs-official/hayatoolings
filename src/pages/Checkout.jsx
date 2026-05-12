@@ -129,6 +129,23 @@ const FAILURE_RE = new RegExp(
 
 const TXN_ID_RE = /Txn\s*ID[:\s]+([A-Za-z0-9-]+)/i;
 
+// "Your transaction of ₹ 1 INR was successful!" → { amount: 1, currency: 'INR' }
+// "Your transaction of $25.00 USD ..."          → { amount: 25, currency: 'USD' }
+const AMOUNT_RE = /(?:₹|Rs\.?|\$|€)\s*([\d,]+(?:\.\d+)?)\s*(INR|USD|EUR)?/i;
+const SYMBOL_TO_CCY = { '₹': 'INR', 'Rs': 'INR', '$': 'USD', '€': 'EUR' };
+
+const extractPaidAmount = (text) => {
+  const m = text.match(AMOUNT_RE);
+  if (!m) return {};
+  const amount = Number(String(m[1]).replace(/,/g, ''));
+  let currency = m[2] ? m[2].toUpperCase() : null;
+  if (!currency) {
+    const sym = (m[0].match(/₹|Rs\.?|\$|€/) || [])[0];
+    if (sym) currency = SYMBOL_TO_CCY[sym.replace('.', '')] || null;
+  }
+  return Number.isFinite(amount) ? { amount, currency } : {};
+};
+
 const watchPayglocalResult = (onResult) => {
   if (!onResult) return () => {};
   let done = false;
@@ -150,7 +167,10 @@ const watchPayglocalResult = (onResult) => {
       done = true;
       observer.disconnect();
       clearTimeout(timer);
-      onResult({ status: 'success', gid });
+      // Pull "₹ 1 INR" out of the success line so the backend can compare
+      // it against the order total and reject under-payments.
+      const paid = extractPaidAmount(text);
+      onResult({ status: 'success', gid, ...paid });
     }
   };
   const observer = new MutationObserver(scan);
@@ -330,19 +350,23 @@ const Checkout = () => {
   };
 
   // Called once watchPayglocalResult detects "successful" or "failed" inside
-  // PayGlocal's popup. We push the outcome to our backend so the admin panel
-  // updates immediately (the webhook would do the same a few seconds later)
-  // and then send the customer to the order-confirmation page.
-  const handlePaymentResult = async ({ status, gid }) => {
+  // PayGlocal's popup. We push the outcome — including the amount we scraped
+  // from the popup — to our backend, which runs a cross-check against the
+  // order total. If the customer paid less than what was due, the backend
+  // overrides our optimistic 'success' to 'failed', and we redirect them to
+  // the failed page instead of the green confirmation page.
+  const handlePaymentResult = async ({ status, gid, amount, currency }) => {
     if (!createdOrder) return;
     const orderId = createdOrder.order.orderId;
+    let finalStatus = status;
     try {
-      await api.postReturn({ orderId, status, gid });
+      const { data } = await api.postReturn({ orderId, status, gid, amount, currency });
+      if (data?.order?.paymentStatus) finalStatus = data.order.paymentStatus;
     } catch {
       // Non-fatal: the PayGlocal webhook will reconcile.
     }
-    if (status === 'success') clearCart();
-    navigate(`/order/${encodeURIComponent(orderId)}?status=${status}`);
+    if (finalStatus === 'success') clearCart();
+    navigate(`/order/${encodeURIComponent(orderId)}?status=${finalStatus}`);
   };
 
   if (cart.length === 0 && step !== 3) {
