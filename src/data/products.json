@@ -243,7 +243,7 @@
     "id": 22,
     "name": "Monthly On-Site Maintenance Plan (6 Visits + Daily 30-min NICL Session) + Industrial Nylon Rope — 50 m Coil + 4\" Cut-Off Wheels — Pack of 50",
     "price": 154083,
-    "image": "/products/10.png",
+    "image": "/products/1.png",
     "description": "Service package: 6 scheduled on-site engineer visits per month plus a 30-minute daily review call with your NICL team. Covers preventive maintenance, spindle calibration and operator training. This is a special combo that also includes: Industrial Nylon Rope — 50 m Coil and 4\" Cut-Off Wheels — Pack of 50.",
     "bundleItems": [
       "Monthly On-Site Maintenance Plan (6 Visits + Daily 30-min NICL Session)",
@@ -255,7 +255,7 @@
     "id": 23,
     "name": "Industrial Nylon Rope — 50 m Coil + 4\" Cut-Off Wheels — Pack of 50 + NSK 51308 Thrust Bearings — Pack of 2",
     "price": 212500,
-    "image": "/products/11.png",
+    "image": "/products/9.png",
     "description": "Braided high-tensile nylon rope, 1 m length. UV-stabilised, oil resistant — ideal for tying down loads and counterweights. This is a special combo that also includes: 4\" Cut-Off Wheels — Pack of 50 and NSK 51308 Thrust Bearings — Pack of 2.",
     "bundleItems": [
       "Industrial Nylon Rope — 50 m Coil",
@@ -267,7 +267,7 @@
     "id": 24,
     "name": "4\" Cut-Off Wheels — Pack of 50 + NSK 51308 Thrust Bearings — Pack of 2 + SKF 6001 ZZ C3 Deep-Groove Bearings — Pack of 5",
     "price": 54167,
-    "image": "/products/12.png",
+    "image": "/products/1.png",
     "description": "Bonded aluminium-oxide 4\" cut-off wheels. Sold in packs of 10 — fits all standard angle grinders for cutting metal stock. This is a special combo that also includes: NSK 51308 Thrust Bearings — Pack of 2 and SKF 6001 ZZ C3 Deep-Groove Bearings — Pack of 5.",
     "bundleItems": [
       "4\" Cut-Off Wheels — Pack of 50",
@@ -279,7 +279,7 @@
     "id": 25,
     "name": "NSK 51308 Thrust Bearings — Pack of 2 + SKF 6001 ZZ C3 Deep-Groove Bearings — Pack of 5 + Lathe Turning Combo + Combo (3-in-1) — Boring + Threading + Grooving",
     "price": 100000,
-    "image": "/products/13.png",
+    "image": "/products/20.jpg",
     "description": "Genuine NSK 51308 single-direction thrust ball bearing, 40 × 78 × 26 mm. Used in vertical lathe spindles and gearbox shafts. This is a special combo that also includes: SKF 6001 ZZ C3 Deep-Groove Bearings — Pack of 5 and Lathe Turning Combo + Combo (3-in-1) — Boring + Threading + Grooving.",
     "bundleItems": [
       "NSK 51308 Thrust Bearings — Pack of 2",
@@ -291,7 +291,7 @@
     "id": 26,
     "name": "SKF 6001 ZZ C3 Deep-Groove Bearings — Pack of 5 + Lathe Turning Combo + Combo (3-in-1) — Boring + Threading + Grooving + Drill & Chuck Starter Pack + Combo (3-in-1) — Chuck + Endmill + Connector",
     "price": 74917,
-    "image": "/products/14.png",
+    "image": "/products/20.jpg",
     "description": "SKF 6001 ZZ C3 sealed deep-groove ball bearing, 12 × 28 × 8 mm. C3 clearance for high-speed motor spindles. This is a special combo that also includes: Lathe Turning Combo + Combo (3-in-1) — Boring + Threading + Grooving and Drill & Chuck Starter Pack + Combo (3-in-1) — Chuck + Endmill + Connector.",
     "bundleItems": [
       "SKF 6001 ZZ C3 Deep-Groove Bearings — Pack of 5",
@@ -423,7 +423,7 @@
     "id": 37,
     "name": "12 mm HSS 2-Flute Endmills — Pack of 5 + 5/8\" Right-Hand Threading Bar + 20 mm Heavy-Duty Drill Chuck",
     "price": 116667,
-    "image": "/products/15.jpg",
+    "image": "/products/7.png",
     "description": "12 mm HSS 2-flute endmill with extended flute length for deep slotting in aluminium and free-cutting steels. This is a special combo that also includes: 5/8\" Right-Hand Threading Bar and 20 mm Heavy-Duty Drill Chuck.",
     "bundleItems": [
       "12 mm HSS 2-Flute Endmills — Pack of 5",
@@ -435,7 +435,7 @@
     "id": 38,
     "name": "5/8\" Right-Hand Threading Bar + 20 mm Heavy-Duty Drill Chuck + 25 mm Carbide Roughing Endmill",
     "price": 87500,
-    "image": "/products/6.png",
+    "image": "/products/14.png",
     "description": "5/8\" external threading bar for medium-size lathes. Wider seat accepts 22ER inserts for larger thread pitches. This is a special combo that also includes: 20 mm Heavy-Duty Drill Chuck and 25 mm Carbide Roughing Endmill.",
     "bundleItems": [
       "5/8\" Right-Hand Threading Bar",
@@ -447,7 +447,7 @@
     "id": 39,
     "name": "20 mm Heavy-Duty Drill Chuck + 25 mm Carbide Roughing Endmill + 150 mm Digital Vernier Caliper",
     "price": 125000,
-    "image": "/products/14.png",
+    "image": "/products/6.png",
     "description": "20 mm capacity industrial drill chuck with three-jaw self-centering, B22 spindle taper. Rated for up to 4500 rpm under continuous duty. This is a special combo that also includes: 25 mm Carbide Roughing Endmill and 150 mm Digital Vernier Caliper.",
     "bundleItems": [
       "20 mm Heavy-Duty Drill Chuck",
@@ -459,7 +459,7 @@
     "id": 40,
     "name": "25 mm Carbide Roughing Endmill + 150 mm Digital Vernier Caliper + Dial Indicator with Magnetic Stand",
     "price": 216583,
-    "image": "/products/16.jpg",
+    "image": "/products/7.png",
     "description": "25 mm solid-carbide roughing endmill, corn-cob serrated flutes. Removes material at high feed rates with reduced cutter load. This is a special combo that also includes: 150 mm Digital Vernier Caliper and Dial Indicator with Magnetic Stand.",
     "bundleItems": [
       "25 mm Carbide Roughing Endmill",
@@ -471,7 +471,7 @@
     "id": 41,
     "name": "150 mm Digital Vernier Caliper + Dial Indicator with Magnetic Stand + Drill + Endmill Combo + Combo (2-in-1) — Carbide Drill + HSS Endmill",
     "price": 74917,
-    "image": "/products/21.jpg",
+    "image": "/products/13.png",
     "description": "0.01 mm resolution digital caliper, 150 mm range. IP54-rated case, auto-off, mm / inch / fraction modes. This is a special combo that also includes: Dial Indicator with Magnetic Stand and Drill + Endmill Combo + Combo (2-in-1) — Carbide Drill + HSS Endmill.",
     "bundleItems": [
       "150 mm Digital Vernier Caliper",
@@ -483,7 +483,7 @@
     "id": 42,
     "name": "Dial Indicator with Magnetic Stand + Drill + Endmill Combo + Combo (2-in-1) — Carbide Drill + HSS Endmill + Tap + Threading Insert Combo + Combo (2-in-1) — Hand Tap + ISO Insert",
     "price": 58333,
-    "image": "/products/8.png",
+    "image": "/products/19.jpg",
     "description": "0.01 mm dial indicator paired with a flexible-arm magnetic base. For tramming spindles, checking runout and aligning vices. This is a special combo that also includes: Drill + Endmill Combo + Combo (2-in-1) — Carbide Drill + HSS Endmill and Tap + Threading Insert Combo + Combo (2-in-1) — Hand Tap + ISO Insert.",
     "bundleItems": [
       "Dial Indicator with Magnetic Stand",
