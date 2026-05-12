@@ -1,6 +1,7 @@
 import React, { useState, useMemo, useEffect } from 'react';
 import { Search, SlidersHorizontal, ChevronDown, ChevronUp, X, Star } from 'lucide-react';
 import { Link } from 'react-router-dom';
+import { useCurrency } from '../context/CurrencyContext';
 import ProductCard from '../components/ProductCard';
 import productsData from '../data/products.json';
 import bannerA from '../assets/a.jpg';
@@ -31,18 +32,10 @@ const categorizeProduct = (name) => {
 
 const allCategories = [...new Set(productsData.map(p => categorizeProduct(p.name)))].sort();
 
-const priceRanges = [
-  { label: 'Under ₹100', min: 0, max: 100 },
-  { label: '₹100 - ₹500', min: 100, max: 500 },
-  { label: '₹500 - ₹1,000', min: 500, max: 1000 },
-  { label: '₹1,000 - ₹5,000', min: 1000, max: 5000 },
-  { label: '₹5,000 - ₹10,000', min: 5000, max: 10000 },
-  { label: 'Above ₹10,000', min: 10000, max: Infinity },
-];
-
 const PRODUCTS_PER_PAGE = 20;
 
 const Products = () => {
+  const { currency, symbols, convert } = useCurrency();
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedCategories, setSelectedCategories] = useState([]);
   const [selectedPriceRanges, setSelectedPriceRanges] = useState([]);
@@ -50,6 +43,23 @@ const Products = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [showMobileFilter, setShowMobileFilter] = useState(false);
   const [expandedSections, setExpandedSections] = useState({ category: true, price: true });
+
+  const priceRanges = useMemo(() => {
+    const isINR = currency === 'INR';
+    const thresholds = isINR 
+      ? [50000, 100000, 150000, 200000]
+      : [500, 1000, 1500, 2000];
+      
+    const sym = symbols[currency] || '$';
+
+    return [
+      { label: `Under ${sym}${thresholds[0].toLocaleString()}`, min: 0, max: thresholds[0] },
+      { label: `${sym}${thresholds[0].toLocaleString()} - ${sym}${thresholds[1].toLocaleString()}`, min: thresholds[0], max: thresholds[1] },
+      { label: `${sym}${thresholds[1].toLocaleString()} - ${sym}${thresholds[2].toLocaleString()}`, min: thresholds[1], max: thresholds[2] },
+      { label: `${sym}${thresholds[2].toLocaleString()} - ${sym}${thresholds[3].toLocaleString()}`, min: thresholds[2], max: thresholds[3] },
+      { label: `Above ${sym}${thresholds[3].toLocaleString()}`, min: thresholds[3], max: Infinity },
+    ];
+  }, [currency, symbols]);
 
   const toggleSection = (section) => {
     setExpandedSections(prev => ({ ...prev, [section]: !prev[section] }));
@@ -94,9 +104,10 @@ const Products = () => {
 
     // Price filter
     if (selectedPriceRanges.length > 0) {
-      result = result.filter(p =>
-        selectedPriceRanges.some(i => p.price >= priceRanges[i].min && p.price < priceRanges[i].max)
-      );
+      result = result.filter(p => {
+        const currentPrice = convert(p.price);
+        return selectedPriceRanges.some(i => currentPrice >= priceRanges[i].min && currentPrice < priceRanges[i].max);
+      });
     }
 
     // Sort

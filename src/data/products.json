@@ -2,7 +2,7 @@
   {
     "id": 1,
     "name": "0.5 HP Precision Grinding Machine + Special CNC Jaws Set — 100 / 150 / 200 mm + 10 × 12 Pneumatic Push-In Connectors — Pack of 50",
-    "price": 41667,
+    "price": 166667,
     "image": "/products/1.png",
     "description": "A compact, vibration-damped 0.5 HP bench grinder built for daily workshop use. Hardened cast-iron base, sealed bearings and an inverter-grade motor keep grinding smooth even under continuous load. This is a special combo that also includes: Special CNC Jaws Set — 100 / 150 / 200 mm and 10 × 12 Pneumatic Push-In Connectors — Pack of 50.",
     "bundleItems": [
@@ -14,8 +14,8 @@
   {
     "id": 2,
     "name": "Special CNC Jaws Set — 100 / 150 / 200 mm + 10 × 12 Pneumatic Push-In Connectors — Pack of 50 + Carbide 2-Flute Drills 10.2 mm — Pack of 3",
-    "price": 83333,
-    "image": "/products/10.png",
+    "price": 108250,
+    "image": "/products/2.png",
     "description": "Soft-blank CNC chuck jaws machined to tight tolerances. Comes as a graded 100 / 150 / 200 mm trio so a single set covers your light, medium and heavy turning needs. This is a special combo that also includes: 10 × 12 Pneumatic Push-In Connectors — Pack of 50 and Carbide 2-Flute Drills 10.2 mm — Pack of 3.",
     "bundleItems": [
       "Special CNC Jaws Set — 100 / 150 / 200 mm",
@@ -26,8 +26,8 @@
   {
     "id": 3,
     "name": "10 × 12 Pneumatic Push-In Connectors — Pack of 50 + Carbide 2-Flute Drills 10.2 mm — Pack of 3 + 10 mm Precision Drill Chuck",
-    "price": 125000,
-    "image": "/products/11.png",
+    "price": 75000,
+    "image": "/products/3.png",
     "description": "Brass-bodied push-in straight connector for 10 mm OD tube to 12 mm thread. Rated for 0–10 bar at 60 °C, with a self-locking collet. This is a special combo that also includes: Carbide 2-Flute Drills 10.2 mm — Pack of 3 and 10 mm Precision Drill Chuck.",
     "bundleItems": [
       "10 × 12 Pneumatic Push-In Connectors — Pack of 50",
@@ -38,8 +38,8 @@
   {
     "id": 4,
     "name": "Carbide 2-Flute Drills 10.2 mm — Pack of 3 + 10 mm Precision Drill Chuck + 10 mm HSS Endmills (4-Flute) — Pack of 5",
-    "price": 41667,
-    "image": "/products/12.png",
+    "price": 100000,
+    "image": "/products/4.png",
     "description": "Micro-grain solid-carbide twist drill, AlTiN-coated for high-speed dry drilling in alloy steel and stainless. Internal coolant channels keep chip evacuation clean. This is a special combo that also includes: 10 mm Precision Drill Chuck and 10 mm HSS Endmills (4-Flute) — Pack of 5.",
     "bundleItems": [
       "Carbide 2-Flute Drills 10.2 mm — Pack of 3",
@@ -50,8 +50,8 @@
   {
     "id": 6,
     "name": "10 mm Precision Drill Chuck + 10 mm HSS Endmills (4-Flute) — Pack of 5 + 10 mm H-TECH Insert Cutter Tool Holder",
-    "price": 83333,
-    "image": "/products/14.png",
+    "price": 49917,
+    "image": "/products/6.png",
     "description": "Self-tightening 10 mm keyless drill chuck with hardened steel jaws and ≤0.05 mm runout — drops straight into B16 / JT6 spindles. This is a special combo that also includes: 10 mm HSS Endmills (4-Flute) — Pack of 5 and 10 mm H-TECH Insert Cutter Tool Holder.",
     "bundleItems": [
       "10 mm Precision Drill Chuck",
@@ -62,8 +62,8 @@
   {
     "id": 7,
     "name": "10 mm HSS Endmills (4-Flute) — Pack of 5 + 10 mm H-TECH Insert Cutter Tool Holder + Multi-Core Industrial Cable — 100 m Roll",
-    "price": 125000,
-    "image": "/products/15.jpg",
+    "price": 62417,
+    "image": "/products/7.png",
     "description": "M2 HSS 4-flute square endmill, 10 mm diameter, TiN-coated. A reliable workhorse for slotting and profiling mild steel, aluminium and brass. This is a special combo that also includes: 10 mm H-TECH Insert Cutter Tool Holder and Multi-Core Industrial Cable — 100 m Roll.",
     "bundleItems": [
       "10 mm HSS Endmills (4-Flute) — Pack of 5",
@@ -74,8 +74,8 @@
   {
     "id": 8,
     "name": "10 mm H-TECH Insert Cutter Tool Holder + Multi-Core Industrial Cable — 100 m Roll + 1-1/4\" Heavy-Duty Hex Nuts — Box of 100",
-    "price": 41667,
-    "image": "/products/16.jpg",
+    "price": 83333,
+    "image": "/products/8.png",
     "description": "10 mm shank indexable cutter holder for APMT-style inserts. Internal coolant port, hardened anti-vibration body — ideal for finishing passes on the lathe. This is a special combo that also includes: Multi-Core Industrial Cable — 100 m Roll and 1-1/4\" Heavy-Duty Hex Nuts — Box of 100.",
     "bundleItems": [
       "10 mm H-TECH Insert Cutter Tool Holder",
@@ -86,8 +86,8 @@
   {
     "id": 9,
     "name": "Multi-Core Industrial Cable — 100 m Roll + 1-1/4\" Heavy-Duty Hex Nuts — Box of 100 + 1.1/8 × 12 UNF HSS-E Taps — Pack of 3",
-    "price": 83333,
-    "image": "/products/18.jpg",
+    "price": 100000,
+    "image": "/products/9.png",
     "description": "Flexible PVC-sheathed multi-core 10 m cable for control panels and CNC pendants. Oil and coolant resistant, EMI screened. This is a special combo that also includes: 1-1/4\" Heavy-Duty Hex Nuts — Box of 100 and 1.1/8 × 12 UNF HSS-E Taps — Pack of 3.",
     "bundleItems": [
       "Multi-Core Industrial Cable — 100 m Roll",
@@ -98,8 +98,8 @@
   {
     "id": 10,
     "name": "1-1/4\" Heavy-Duty Hex Nuts — Box of 100 + 1.1/8 × 12 UNF HSS-E Taps — Pack of 3 + 1/2 × 12 BSW Spiral-Flute Taps — Pack of 5",
-    "price": 125000,
-    "image": "/products/19.jpg",
+    "price": 79167,
+    "image": "/products/10.png",
     "description": "Grade-10 hardened hex nut, 1-1/4\" UNC. Zinc-plated finish suited for jig, fixture and chuck-stop applications. This is a special combo that also includes: 1.1/8 × 12 UNF HSS-E Taps — Pack of 3 and 1/2 × 12 BSW Spiral-Flute Taps — Pack of 5.",
     "bundleItems": [
       "1-1/4\" Heavy-Duty Hex Nuts — Box of 100",
@@ -110,8 +110,8 @@
   {
     "id": 11,
     "name": "1.1/8 × 12 UNF HSS-E Taps — Pack of 3 + 1/2 × 12 BSW Spiral-Flute Taps — Pack of 5 + 12\" / 300 mm Stainless Steel Scales — Pack of 10",
-    "price": 41667,
-    "image": "/products/2.png",
+    "price": 124917,
+    "image": "/products/11.png",
     "description": "HSS-E (5 % cobalt) hand tap, 1.1/8 × 12 UNF. Spiral-point geometry pushes chips forward — perfect for through-holes in steel. This is a special combo that also includes: 1/2 × 12 BSW Spiral-Flute Taps — Pack of 5 and 12\" / 300 mm Stainless Steel Scales — Pack of 10.",
     "bundleItems": [
       "1.1/8 × 12 UNF HSS-E Taps — Pack of 3",
@@ -122,8 +122,8 @@
   {
     "id": 12,
     "name": "1/2 × 12 BSW Spiral-Flute Taps — Pack of 5 + 12\" / 300 mm Stainless Steel Scales — Pack of 10 + 1/2\" Bore Threading Tool",
-    "price": 83333,
-    "image": "/products/20.jpg",
+    "price": 170750,
+    "image": "/products/12.png",
     "description": "HSS spiral-flute BSW tap, 1/2-12. Pulls chips up out of blind holes; suitable for stainless and tough alloy steels. This is a special combo that also includes: 12\" / 300 mm Stainless Steel Scales — Pack of 10 and 1/2\" Bore Threading Tool.",
     "bundleItems": [
       "1/2 × 12 BSW Spiral-Flute Taps — Pack of 5",
@@ -134,8 +134,8 @@
   {
     "id": 13,
     "name": "12\" / 300 mm Stainless Steel Scales — Pack of 10 + 1/2\" Bore Threading Tool + 1/2\" Right-Hand Boring Bar",
-    "price": 125000,
-    "image": "/products/21.jpg",
+    "price": 104083,
+    "image": "/products/13.png",
     "description": "Hardened stainless 300 mm scale with dual imperial / metric etched graduations. Satin-chrome finish for glare-free reading. This is a special combo that also includes: 1/2\" Bore Threading Tool and 1/2\" Right-Hand Boring Bar.",
     "bundleItems": [
       "12\" / 300 mm Stainless Steel Scales — Pack of 10",
@@ -146,8 +146,8 @@
   {
     "id": 14,
     "name": "1/2\" Bore Threading Tool + 1/2\" Right-Hand Boring Bar + 1/2\" Grooving Tool",
-    "price": 41667,
-    "image": "/products/3.png",
+    "price": 50000,
+    "image": "/products/14.png",
     "description": "1/2\" shank single-point internal threading tool. Pre-ground 60° insert seat, fits standard ISO carbide inserts. This is a special combo that also includes: 1/2\" Right-Hand Boring Bar and 1/2\" Grooving Tool.",
     "bundleItems": [
       "1/2\" Bore Threading Tool",
@@ -158,8 +158,8 @@
   {
     "id": 15,
     "name": "1/2\" Right-Hand Boring Bar + 1/2\" Grooving Tool + 1/2\" Right-Hand Threading Bar",
-    "price": 83333,
-    "image": "/products/4.png",
+    "price": 54167,
+    "image": "/products/15.jpg",
     "description": "Solid steel 1/2\" RH boring bar for through and blind-hole boring on the lathe. Replaceable CCMT-insert pocket. This is a special combo that also includes: 1/2\" Grooving Tool and 1/2\" Right-Hand Threading Bar.",
     "bundleItems": [
       "1/2\" Right-Hand Boring Bar",
@@ -170,8 +170,8 @@
   {
     "id": 16,
     "name": "1/2\" Grooving Tool + 1/2\" Right-Hand Threading Bar + 1/4\" Right-Hand Boring Bar",
-    "price": 125000,
-    "image": "/products/5.png",
+    "price": 66583,
+    "image": "/products/16.jpg",
     "description": "1/2\" external grooving tool with hardened seat for 2 mm and 3 mm wide insert blades — clean O-ring grooves and parting cuts. This is a special combo that also includes: 1/2\" Right-Hand Threading Bar and 1/4\" Right-Hand Boring Bar.",
     "bundleItems": [
       "1/2\" Grooving Tool",
@@ -182,7 +182,7 @@
   {
     "id": 17,
     "name": "1/2\" Right-Hand Threading Bar + 1/4\" Right-Hand Boring Bar + 1/4\" BSW Thread Plug Gauge (Go / No-Go)",
-    "price": 41667,
+    "price": 125000,
     "image": "/products/6.png",
     "description": "Right-hand external threading toolholder for 1/2\" lathes. Accepts standard 16ER ISO threading inserts. This is a special combo that also includes: 1/4\" Right-Hand Boring Bar and 1/4\" BSW Thread Plug Gauge (Go / No-Go).",
     "bundleItems": [
@@ -194,8 +194,8 @@
   {
     "id": 18,
     "name": "1/4\" Right-Hand Boring Bar + 1/4\" BSW Thread Plug Gauge (Go / No-Go) + 165 mm Chuck T-Nuts — Set of 4",
-    "price": 83333,
-    "image": "/products/7.png",
+    "price": 170750,
+    "image": "/products/18.jpg",
     "description": "Compact 1/4\" RH boring bar for small-bore operations. Mirror-finish ground shank, indexable CCMT pocket. This is a special combo that also includes: 1/4\" BSW Thread Plug Gauge (Go / No-Go) and 165 mm Chuck T-Nuts — Set of 4.",
     "bundleItems": [
       "1/4\" Right-Hand Boring Bar",
@@ -206,8 +206,8 @@
   {
     "id": 19,
     "name": "1/4\" BSW Thread Plug Gauge (Go / No-Go) + 165 mm Chuck T-Nuts — Set of 4 + 16ER 1.5 ISO Threading Insert (10 pcs)",
-    "price": 125000,
-    "image": "/products/8.png",
+    "price": 62417,
+    "image": "/products/19.jpg",
     "description": "Calibrated 1/4\" BSW Go / No-Go plug gauge in a wooden case. Issued with a manufacturer calibration certificate. This is a special combo that also includes: 165 mm Chuck T-Nuts — Set of 4 and 16ER 1.5 ISO Threading Insert (10 pcs).",
     "bundleItems": [
       "1/4\" BSW Thread Plug Gauge (Go / No-Go)",
@@ -218,8 +218,8 @@
   {
     "id": 20,
     "name": "165 mm Chuck T-Nuts — Set of 4 + 16ER 1.5 ISO Threading Insert (10 pcs) + Monthly On-Site Maintenance Plan (6 Visits + Daily 30-min NICL Session)",
-    "price": 41667,
-    "image": "/products/9.png",
+    "price": 75000,
+    "image": "/products/20.jpg",
     "description": "Hardened T-nut for 165 mm 3-jaw and 4-jaw lathe chucks. Drop-in replacement that restores grip and concentricity. This is a special combo that also includes: 16ER 1.5 ISO Threading Insert (10 pcs) and Monthly On-Site Maintenance Plan (6 Visits + Daily 30-min NICL Session).",
     "bundleItems": [
       "165 mm Chuck T-Nuts — Set of 4",
@@ -230,8 +230,8 @@
   {
     "id": 21,
     "name": "16ER 1.5 ISO Threading Insert (10 pcs) + Monthly On-Site Maintenance Plan (6 Visits + Daily 30-min NICL Session) + Industrial Nylon Rope — 50 m Coil",
-    "price": 83333,
-    "image": "/products/1.png",
+    "price": 45750,
+    "image": "/products/21.jpg",
     "description": "Pack of 10 carbide 16ER 1.5 ISO threading inserts with TiAlN coating. For external metric threads in steel and stainless. This is a special combo that also includes: Monthly On-Site Maintenance Plan (6 Visits + Daily 30-min NICL Session) and Industrial Nylon Rope — 50 m Coil.",
     "bundleItems": [
       "16ER 1.5 ISO Threading Insert (10 pcs)",
@@ -242,7 +242,7 @@
   {
     "id": 22,
     "name": "Monthly On-Site Maintenance Plan (6 Visits + Daily 30-min NICL Session) + Industrial Nylon Rope — 50 m Coil + 4\" Cut-Off Wheels — Pack of 50",
-    "price": 125000,
+    "price": 154083,
     "image": "/products/10.png",
     "description": "Service package: 6 scheduled on-site engineer visits per month plus a 30-minute daily review call with your NICL team. Covers preventive maintenance, spindle calibration and operator training. This is a special combo that also includes: Industrial Nylon Rope — 50 m Coil and 4\" Cut-Off Wheels — Pack of 50.",
     "bundleItems": [
@@ -254,7 +254,7 @@
   {
     "id": 23,
     "name": "Industrial Nylon Rope — 50 m Coil + 4\" Cut-Off Wheels — Pack of 50 + NSK 51308 Thrust Bearings — Pack of 2",
-    "price": 41667,
+    "price": 212500,
     "image": "/products/11.png",
     "description": "Braided high-tensile nylon rope, 1 m length. UV-stabilised, oil resistant — ideal for tying down loads and counterweights. This is a special combo that also includes: 4\" Cut-Off Wheels — Pack of 50 and NSK 51308 Thrust Bearings — Pack of 2.",
     "bundleItems": [
@@ -266,7 +266,7 @@
   {
     "id": 24,
     "name": "4\" Cut-Off Wheels — Pack of 50 + NSK 51308 Thrust Bearings — Pack of 2 + SKF 6001 ZZ C3 Deep-Groove Bearings — Pack of 5",
-    "price": 83333,
+    "price": 54167,
     "image": "/products/12.png",
     "description": "Bonded aluminium-oxide 4\" cut-off wheels. Sold in packs of 10 — fits all standard angle grinders for cutting metal stock. This is a special combo that also includes: NSK 51308 Thrust Bearings — Pack of 2 and SKF 6001 ZZ C3 Deep-Groove Bearings — Pack of 5.",
     "bundleItems": [
@@ -278,7 +278,7 @@
   {
     "id": 25,
     "name": "NSK 51308 Thrust Bearings — Pack of 2 + SKF 6001 ZZ C3 Deep-Groove Bearings — Pack of 5 + Lathe Turning Combo + Combo (3-in-1) — Boring + Threading + Grooving",
-    "price": 125000,
+    "price": 100000,
     "image": "/products/13.png",
     "description": "Genuine NSK 51308 single-direction thrust ball bearing, 40 × 78 × 26 mm. Used in vertical lathe spindles and gearbox shafts. This is a special combo that also includes: SKF 6001 ZZ C3 Deep-Groove Bearings — Pack of 5 and Lathe Turning Combo + Combo (3-in-1) — Boring + Threading + Grooving.",
     "bundleItems": [
@@ -290,7 +290,7 @@
   {
     "id": 26,
     "name": "SKF 6001 ZZ C3 Deep-Groove Bearings — Pack of 5 + Lathe Turning Combo + Combo (3-in-1) — Boring + Threading + Grooving + Drill & Chuck Starter Pack + Combo (3-in-1) — Chuck + Endmill + Connector",
-    "price": 41667,
+    "price": 74917,
     "image": "/products/14.png",
     "description": "SKF 6001 ZZ C3 sealed deep-groove ball bearing, 12 × 28 × 8 mm. C3 clearance for high-speed motor spindles. This is a special combo that also includes: Lathe Turning Combo + Combo (3-in-1) — Boring + Threading + Grooving and Drill & Chuck Starter Pack + Combo (3-in-1) — Chuck + Endmill + Connector.",
     "bundleItems": [
@@ -302,7 +302,7 @@
   {
     "id": 27,
     "name": "Lathe Turning Combo (3-in-1) — Boring + Threading + Grooving",
-    "price": 83333,
+    "price": 62417,
     "image": "/products/4.png",
     "description": "Three of our most-used lathe turning tools bundled together. Covers external grooving, external threading and internal boring — a complete starter kit for any turning shop. Includes multiple items in a single combo package.",
     "bundleItems": [
@@ -314,7 +314,7 @@
   {
     "id": 28,
     "name": "Drill & Chuck Starter Pack (3-in-1) — Chuck + Endmill + Connector",
-    "price": 125000,
+    "price": 41667,
     "image": "/products/14.png",
     "description": "Everything you need to bring a new milling spindle online: a precision 10 mm keyless chuck, an HSS 4-flute endmill and a matching pneumatic connector for the coolant line. Includes multiple items in a single combo package.",
     "bundleItems": [
@@ -326,7 +326,7 @@
   {
     "id": 29,
     "name": "Precision Measurement Kit (3-in-1) — Scale + Gauge + Insert",
-    "price": 41667,
+    "price": 150000,
     "image": "/products/21.jpg",
     "description": "An inspection-bench essentials kit. A 300 mm stainless scale for layout, a calibrated 1/4\" BSW plug gauge for thread verification and a fresh threading insert for re-cutting if you fail the gauge. Includes multiple items in a single combo package.",
     "bundleItems": [
@@ -338,7 +338,7 @@
   {
     "id": 30,
     "name": "Carbide Power Bundle (3-in-1) — Drill + Cutter Holder + Endmill",
-    "price": 83333,
+    "price": 54083,
     "image": "/products/12.png",
     "description": "Heavy-duty carbide trio for tough cutting jobs: a 10.2 mm carbide drill, an H-TECH insert cutter holder and a TiN-coated HSS endmill. Built for stainless and tool-steel production work. Includes multiple items in a single combo package.",
     "bundleItems": [
@@ -350,7 +350,7 @@
   {
     "id": 31,
     "name": "Milling Essentials Combo (3-in-1) — Endmill + Holder + Chuck",
-    "price": 125000,
+    "price": 79083,
     "image": "/products/16.jpg",
     "description": "A balanced milling starter set covering shoulder milling, face milling and drilling — endmill, indexable cutter holder and matching keyless drill chuck. Includes multiple items in a single combo package.",
     "bundleItems": [
@@ -362,7 +362,7 @@
   {
     "id": 32,
     "name": "Workshop Maintenance Kit (3-in-1) — Hose + Cable + Rope",
-    "price": 41667,
+    "price": 170833,
     "image": "/products/13.png",
     "description": "Replenish the consumables drawer in one click: 10 m of pneumatic hose, a 10 m flexible control cable and 1 m of braided nylon rope. Includes multiple items in a single combo package.",
     "bundleItems": [
@@ -374,7 +374,7 @@
   {
     "id": 33,
     "name": "Industrial Bearing Set (3-in-1) — NSK 51308 + SKF 6001 + T-Nut",
-    "price": 83333,
+    "price": 62417,
     "image": "/products/9.png",
     "description": "Spindle-rebuild bundle: a genuine NSK thrust bearing, an SKF deep-groove ball bearing and a 165 mm chuck T-nut to refit the chuck after the rebuild. Includes multiple items in a single combo package.",
     "bundleItems": [
@@ -386,7 +386,7 @@
   {
     "id": 34,
     "name": "CNC Special Jaws Trio (3-Piece Set 100 / 150 / 200 mm)",
-    "price": 125000,
+    "price": 70750,
     "image": "/products/10.png",
     "description": "Graded set of 100, 150 and 200 mm soft-blank CNC chuck jaws. Buy once and cover small, medium and heavy turning jobs without re-machining. Includes multiple items in a single combo package.",
     "bundleItems": [
@@ -398,7 +398,7 @@
   {
     "id": 35,
     "name": "Machine Starter Pack (3-in-1) — Grinder + Chuck + Tap",
-    "price": 41667,
+    "price": 74917,
     "image": "/products/1.png",
     "description": "Open a new workshop floor with this top-end starter pack — a 0.5 HP grinder for tool sharpening, a 10 mm drill chuck for the mill and a 1/2-12 BSW spiral tap for assembly work. Includes multiple items in a single combo package.",
     "bundleItems": [
@@ -410,7 +410,7 @@
   {
     "id": 36,
     "name": "Threading Master Kit (3-in-1) — Tap + Insert + Bar",
-    "price": 83333,
+    "price": 104083,
     "image": "/products/2.png",
     "description": "Threading from start to finish: a UNF HSS-E hand tap for cut threads, an ISO threading insert for production threading on the lathe and the matching threading bar. Includes multiple items in a single combo package.",
     "bundleItems": [
@@ -422,7 +422,7 @@
   {
     "id": 37,
     "name": "12 mm HSS 2-Flute Endmills — Pack of 5 + 5/8\" Right-Hand Threading Bar + 20 mm Heavy-Duty Drill Chuck",
-    "price": 125000,
+    "price": 116667,
     "image": "/products/15.jpg",
     "description": "12 mm HSS 2-flute endmill with extended flute length for deep slotting in aluminium and free-cutting steels. This is a special combo that also includes: 5/8\" Right-Hand Threading Bar and 20 mm Heavy-Duty Drill Chuck.",
     "bundleItems": [
@@ -434,7 +434,7 @@
   {
     "id": 38,
     "name": "5/8\" Right-Hand Threading Bar + 20 mm Heavy-Duty Drill Chuck + 25 mm Carbide Roughing Endmill",
-    "price": 41667,
+    "price": 87500,
     "image": "/products/6.png",
     "description": "5/8\" external threading bar for medium-size lathes. Wider seat accepts 22ER inserts for larger thread pitches. This is a special combo that also includes: 20 mm Heavy-Duty Drill Chuck and 25 mm Carbide Roughing Endmill.",
     "bundleItems": [
@@ -446,7 +446,7 @@
   {
     "id": 39,
     "name": "20 mm Heavy-Duty Drill Chuck + 25 mm Carbide Roughing Endmill + 150 mm Digital Vernier Caliper",
-    "price": 83333,
+    "price": 125000,
     "image": "/products/14.png",
     "description": "20 mm capacity industrial drill chuck with three-jaw self-centering, B22 spindle taper. Rated for up to 4500 rpm under continuous duty. This is a special combo that also includes: 25 mm Carbide Roughing Endmill and 150 mm Digital Vernier Caliper.",
     "bundleItems": [
@@ -458,7 +458,7 @@
   {
     "id": 40,
     "name": "25 mm Carbide Roughing Endmill + 150 mm Digital Vernier Caliper + Dial Indicator with Magnetic Stand",
-    "price": 125000,
+    "price": 216583,
     "image": "/products/16.jpg",
     "description": "25 mm solid-carbide roughing endmill, corn-cob serrated flutes. Removes material at high feed rates with reduced cutter load. This is a special combo that also includes: 150 mm Digital Vernier Caliper and Dial Indicator with Magnetic Stand.",
     "bundleItems": [
@@ -470,7 +470,7 @@
   {
     "id": 41,
     "name": "150 mm Digital Vernier Caliper + Dial Indicator with Magnetic Stand + Drill + Endmill Combo + Combo (2-in-1) — Carbide Drill + HSS Endmill",
-    "price": 41667,
+    "price": 74917,
     "image": "/products/21.jpg",
     "description": "0.01 mm resolution digital caliper, 150 mm range. IP54-rated case, auto-off, mm / inch / fraction modes. This is a special combo that also includes: Dial Indicator with Magnetic Stand and Drill + Endmill Combo + Combo (2-in-1) — Carbide Drill + HSS Endmill.",
     "bundleItems": [
@@ -482,7 +482,7 @@
   {
     "id": 42,
     "name": "Dial Indicator with Magnetic Stand + Drill + Endmill Combo + Combo (2-in-1) — Carbide Drill + HSS Endmill + Tap + Threading Insert Combo + Combo (2-in-1) — Hand Tap + ISO Insert",
-    "price": 83333,
+    "price": 58333,
     "image": "/products/8.png",
     "description": "0.01 mm dial indicator paired with a flexible-arm magnetic base. For tramming spindles, checking runout and aligning vices. This is a special combo that also includes: Drill + Endmill Combo + Combo (2-in-1) — Carbide Drill + HSS Endmill and Tap + Threading Insert Combo + Combo (2-in-1) — Hand Tap + ISO Insert.",
     "bundleItems": [
@@ -494,7 +494,7 @@
   {
     "id": 43,
     "name": "Drill + Endmill Combo (2-in-1) — Carbide Drill + HSS Endmill",
-    "price": 125000,
+    "price": 133250,
     "image": "/products/12.png",
     "description": "A drill-and-mill pair for one-setup work — a carbide drill to open the hole and a matching HSS endmill to enlarge or profile it. Includes multiple items in a single combo package.",
     "bundleItems": [
@@ -505,7 +505,7 @@
   {
     "id": 44,
     "name": "Tap + Threading Insert Combo (2-in-1) — Hand Tap + ISO Insert",
-    "price": 41667,
+    "price": 129083,
     "image": "/products/2.png",
     "description": "Cover hand tapping and CNC threading in one purchase — a UNF HSS-E hand tap for fixturing work plus an ISO threading insert for production runs. Includes multiple items in a single combo package.",
     "bundleItems": [
@@ -516,7 +516,7 @@
   {
     "id": 45,
     "name": "₹1 Test Product — Payment Smoke Test + 5-Axis CNC Machining Center + Industrial Fiber Laser Cutter",
-    "price": 83333,
+    "price": 150000,
     "image": "/products/19.jpg",
     "description": "Internal test SKU priced at ₹1 (≈ $0.01 / €0.01). Use this to smoke-test the live PayGlocal flow end-to-end — a real charge is created, the webhook fires, and the admin panel updates — all without spending real money. Hide this from the storefront before going public. This is a special combo that also includes: 5-Axis CNC Machining Center and Industrial Fiber Laser Cutter.",
     "bundleItems": [
@@ -528,7 +528,7 @@
   {
     "id": 46,
     "name": "5-Axis CNC Machining Center + Industrial Fiber Laser Cutter + Heavy-Duty Robotic Arm",
-    "price": 125000,
+    "price": 166667,
     "image": "/products/46.jpg",
     "description": "A high-precision 5-axis CNC machining center designed for complex aerospace and automotive components. Features a 15,000 RPM spindle, 40-tool ATC, and rapid traverse rates for maximum productivity. This is a special combo that also includes: Industrial Fiber Laser Cutter and Heavy-Duty Robotic Arm.",
     "bundleItems": [
@@ -540,7 +540,7 @@
   {
     "id": 47,
     "name": "Industrial Fiber Laser Cutter + Heavy-Duty Robotic Arm + 0.5 HP Precision Grinding Machine",
-    "price": 41667,
+    "price": 104083,
     "image": "/products/47.jpg",
     "description": "Heavy-duty 4000W fiber laser cutting machine. Capable of slicing through thick carbon steel and stainless steel with pinpoint accuracy. Includes an enclosed cutting bed and automated sheet loader. This is a special combo that also includes: Heavy-Duty Robotic Arm and 0.5 HP Precision Grinding Machine.",
     "bundleItems": [
@@ -552,8 +552,8 @@
   {
     "id": 48,
     "name": "Heavy-Duty Robotic Arm + 0.5 HP Precision Grinding Machine + Special CNC Jaws Set — 100 / 150 / 200 mm",
-    "price": 83333,
-    "image": "/products/48.jpg",
+    "price": 87500,
+    "image": "/products/48.png",
     "description": "6-axis industrial robotic arm with a 50kg payload capacity and 2-meter reach. Ideal for automated welding, material handling, and precise assembly operations. Comes with an intuitive teach pendant. This is a special combo that also includes: 0.5 HP Precision Grinding Machine and Special CNC Jaws Set — 100 / 150 / 200 mm.",
     "bundleItems": [
       "Heavy-Duty Robotic Arm",

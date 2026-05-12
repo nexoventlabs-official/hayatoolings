@@ -59,15 +59,15 @@ const ProductDetail = () => {
       return [cover];
     }
     const matched = product.bundleItems.map((itemName) => {
-      const hit = productsData.find((p) => p.name === itemName || p.name.includes(itemName) || itemName.includes(p.name));
+      // Find the product whose original name (stored in bundleItems[0]) matches the item
+      const hit = productsData.find((p) => (p.bundleItems && p.bundleItems[0] === itemName) || p.name === itemName);
       return {
         image: hit?.image || product.image,
         label: itemName,
       };
     });
-    // First slide is the cover so the customer sees the headline image, then
-    // the carousel reveals what's inside.
-    return [cover, ...matched];
+    // Return exactly the bundle items so they cycle 1:1 with the bundled products
+    return matched;
   }, [product]);
 
   const [slideIndex, setSlideIndex] = useState(0);
@@ -168,8 +168,8 @@ const ProductDetail = () => {
                     <ChevronRight size={20} />
                   </button>
                   <div className="carousel-caption">
-                    {slideIndex === 0 ? 'Bundle cover' : `${slideIndex} of ${carouselSlides.length - 1}`}
-                    {slideIndex > 0 && (
+                    {slideIndex + 1} of {carouselSlides.length}
+                    {carouselSlides[slideIndex]?.label && (
                       <span className="carousel-caption-name"> — {carouselSlides[slideIndex].label}</span>
                     )}
                   </div>

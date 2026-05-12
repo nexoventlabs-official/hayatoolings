@@ -18,13 +18,13 @@ const ProductCard = ({ product, hideAddButton }) => {
       return [cover];
     }
     const matched = product.bundleItems.map((itemName) => {
-      // Find the item exactly, or if it has been renamed, find a partial match
-      const hit = productsData.find((p) => p.name === itemName || p.name.includes(itemName) || itemName.includes(p.name));
+      // Find the product whose original name (stored in bundleItems[0]) matches the item
+      const hit = productsData.find((p) => (p.bundleItems && p.bundleItems[0] === itemName) || p.name === itemName);
       return {
         image: hit?.image || product.image,
       };
     });
-    return [cover, ...matched];
+    return matched;
   }, [product]);
 
   useEffect(() => {
