@@ -11,90 +11,21 @@ import './Checkout.css';
 
 const PAYGLOCAL_SCRIPT = 'https://oneclick.payglocal.in/simple.js';
 
-// --- PayGlocal popup prefill helpers ------------------------------------
+// --- PayGlocal popup prefill -- INTENTIONALLY DISABLED ------------------
 //
-// PayGlocal's Simple-Pay popup is a React app rendered into the host page.
-// Setting `input.value` directly is silently ignored by React's controlled
-// inputs because React tracks the previous value on the element's internal
-// _valueTracker. We must use the native property setter and dispatch a
-// bubbling `input` event so React's onChange picks the new value up.
-
-const setReactValue = (el, value) => {
-  if (!el) return false;
-  const proto =
-    el.tagName === 'TEXTAREA' ? HTMLTextAreaElement.prototype
-    : el.tagName === 'SELECT' ? HTMLSelectElement.prototype
-    : HTMLInputElement.prototype;
-  const desc = Object.getOwnPropertyDescriptor(proto, 'value');
-  if (!desc || !desc.set) return false;
-  desc.set.call(el, String(value));
-  el.dispatchEvent(new Event('input', { bubbles: true }));
-  el.dispatchEvent(new Event('change', { bubbles: true }));
-  return true;
-};
-
-const findInput = (predicate) =>
-  Array.from(document.querySelectorAll('input, textarea')).find(predicate);
-
-// Strip a leading dial code like "+91 " or "91-" or just "+91" so the user's
-// phone goes into the local-number field cleanly (the country code lives in
-// the separate dropdown on the popup).
-const stripDial = (phone) =>
-  String(phone || '')
-    .trim()
-    .replace(/^\+?\d{1,3}[\s-]*/, '');
-
-const applyPrefill = (p) => {
-  if (!p) return 0;
-  let filled = 0;
-
-  // Amount: numeric or decimal input with an amount-y placeholder.
-  if (p.amount != null) {
-    const amountInput = findInput((i) => {
-      const ph = (i.placeholder || '').toLowerCase();
-      const name = (i.getAttribute('name') || '').toLowerCase();
-      return (
-        /^\s*0+\.0+\s*$/.test(i.placeholder || '') ||
-        /amount/.test(ph) ||
-        /amount/.test(name)
-      );
-    });
-    if (amountInput && amountInput.dataset.pgPrefilled !== '1') {
-      if (setReactValue(amountInput, p.amount)) {
-        amountInput.dataset.pgPrefilled = '1';
-        filled++;
-      }
-    }
-  }
-
-  // Email
-  if (p.email) {
-    const emailInput =
-      document.querySelector('input[type="email"]') ||
-      findInput((i) => /email/i.test(i.placeholder || '') || /email/i.test(i.name || ''));
-    if (emailInput && emailInput.dataset.pgPrefilled !== '1') {
-      if (setReactValue(emailInput, p.email)) {
-        emailInput.dataset.pgPrefilled = '1';
-        filled++;
-      }
-    }
-  }
-
-  // Phone (strip country dial code)
-  if (p.phone) {
-    const phoneInput =
-      document.querySelector('input[type="tel"]') ||
-      findInput((i) => /phone|mobile/i.test(i.placeholder || '') || /phone|mobile/i.test(i.name || ''));
-    if (phoneInput && phoneInput.dataset.pgPrefilled !== '1') {
-      if (setReactValue(phoneInput, stripDial(p.phone))) {
-        phoneInput.dataset.pgPrefilled = '1';
-        filled++;
-      }
-    }
-  }
-
-  return filled;
-};
+// PayGlocal's Simple-Pay widget exposes no public API to prefill the
+// amount / email / phone fields. We previously tried to push values via
+// the native React value-setter + bubbling input events. PayGlocal's
+// redux-form middleware then called getState() on a store that had been
+// recreated by the popup mount cycle, which produced "Minified Redux
+// error #3" in their bundle and silently reverted our values to empty.
+//
+// The proper fixes are (a) configure fixed-amount Simple-Pay buttons on
+// the PayGlocal dashboard, or (b) move to PayGlocal's Initiate-Payment
+// API. Both are documented in the chat history. Until one of those is
+// in place we leave the popup alone and rely on the backend amount
+// cross-check (see backend/routes/payments.js :: checkAmountMatch) to
+// reject under-payments.
 
 // --- PayGlocal popup result watcher --------------------------------------
 //
@@ -182,44 +113,15 @@ const watchPayglocalResult = (onResult) => {
   return () => { observer.disconnect(); done = true; clearTimeout(timer); };
 };
 
-// Watch the DOM until the popup inputs appear, then prefill them. Stops on
-// success or after a timeout so it can't leak observers.
-const schedulePrefill = (prefill) => {
-  if (!prefill) return;
-  // Try once immediately in case the popup is already there.
-  if (applyPrefill(prefill) >= 3) return;
-
-  const start = Date.now();
-  const observer = new MutationObserver(() => {
-    const n = applyPrefill(prefill);
-    // We expect 3 inputs (amount, email, phone). Stop once they're all set
-    // or after ~10s — whichever comes first.
-    const allDone =
-      document.querySelector('input[data-pg-prefilled="1"][type="email"]') &&
-      document.querySelector('input[data-pg-prefilled="1"][type="tel"]') &&
-      n >= 0; // amount tracked separately
-    if (allDone || Date.now() - start > 10000) {
-      observer.disconnect();
-    }
-  });
-  observer.observe(document.body, { childList: true, subtree: true });
-  // Hard stop safety net.
-  setTimeout(() => observer.disconnect(), 12000);
-};
-
 /**
  * Renders the PayGlocal Simple-Pay embed exactly as the merchant docs say:
  *   <form><script src="...simple.js" data-pb-id="pb_xxx"></script></form>
  *
- * After the PayGlocal popup mounts, we push amount / email / phone values
- * into its inputs using the native value setter — see schedulePrefill().
+ * The popup's amount / email / phone fields are filled in by the customer.
+ * PayGlocal's Simple-Pay widget has no public API to prefill them.
  */
-const PayGlocalButton = ({ pbId, prefill, onResult }) => {
+const PayGlocalButton = ({ pbId, onResult }) => {
   const ref = useRef(null);
-  // Keep latest props in refs so we don't have to re-run the script-mount
-  // effect (PayGlocal's simple.js is not idempotent).
-  const prefillRef = useRef(prefill);
-  useEffect(() => { prefillRef.current = prefill; }, [prefill]);
   const onResultRef = useRef(onResult);
   useEffect(() => { onResultRef.current = onResult; }, [onResult]);
 
@@ -239,13 +141,11 @@ const PayGlocalButton = ({ pbId, prefill, onResult }) => {
     form.appendChild(script);
     ref.current.appendChild(form);
 
-    // On the first click we (a) start prefilling the popup once it mounts and
-    // (b) start watching for the final "successful / failed" outcome so we
-    // can sync our backend and redirect the user.
+    // On the first click we start watching for the final "successful /
+    // failed" outcome so we can sync our backend and redirect the user.
     const el = ref.current;
     let stopWatcher = null;
     const onClick = () => {
-      schedulePrefill(prefillRef.current);
       if (!stopWatcher) {
         stopWatcher = watchPayglocalResult((result) => {
           stopWatcher = null;
@@ -515,20 +415,6 @@ const Checkout = () => {
                       <PayGlocalButton
                         pbId={paygPbId}
                         onResult={handlePaymentResult}
-                        prefill={{
-                          amount: totalDisplay,
-                          currency,
-                          email: createdOrder.order.shipping.email,
-                          phone: createdOrder.order.shipping.phone,
-                          firstName: createdOrder.order.shipping.firstName,
-                          lastName: createdOrder.order.shipping.lastName,
-                          country: createdOrder.order.shipping.country,
-                          countryCode: createdOrder.order.shipping.countryCode,
-                          addressLine1: createdOrder.order.shipping.addressLine1,
-                          city: createdOrder.order.shipping.city,
-                          state: createdOrder.order.shipping.state,
-                          postalCode: createdOrder.order.shipping.postalCode,
-                        }}
                       />
                     </div>
                     <div className="payg-trust">
